@@ -1073,12 +1073,24 @@ pinta(); marca(); mostraCena(ambAtual);
      e a pessoa acaba na entrada imersiva, atravessando a casa inteira de novo.
      Rolamos por código, e repetimos depois que tudo carrega. (08/10/2026) */
   if (["ambientes", "produtos", "sobre"].includes(id)) {
-    const ir = () => {
+    /* A home tem 5 MB de foto embutida: enquanto elas decodificam, a página cresce
+       e o alvo muda de lugar. Um scroll só não segura — por isso insistimos por
+       até 4s, parando assim que a pessoa encostar na tela. */
+    if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+    let tentativas = 0, mandou = false;
+    const parar = () => { mandou = true; };
+    ["wheel", "touchstart", "keydown", "mousedown"].forEach(
+      ev => addEventListener(ev, parar, { once: true, passive: true }));
+
+    const fixa = () => {
+      if (mandou) return;                       // a pessoa assumiu o volante
       const alvo = document.getElementById(id);
-      if (alvo) alvo.scrollIntoView({ block: "start" });
+      if (alvo && Math.abs(alvo.getBoundingClientRect().top) > 4) {
+        alvo.scrollIntoView({ block: "start" });
+      }
+      if (++tentativas < 40) setTimeout(fixa, 100);
     };
-    ir();
-    addEventListener("load", () => { ir(); setTimeout(ir, 400); });
+    fixa();
   }
 })();
 </script>
