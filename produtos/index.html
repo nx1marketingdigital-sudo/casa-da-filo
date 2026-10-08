@@ -186,6 +186,17 @@ table.esp td{font-weight:700}
   .garantias{grid-template-columns:1fr}
   .acao{font-size:0;gap:0}
   .miniaturas{grid-template-columns:repeat(4,1fr)}
+  /* No celular o cabeçalho comia 176px de 812 — 22% da tela — com o nome em duas
+     linhas e o botão também. Aqui ele vira uma faixa só: marca à esquerda, botão
+     curto no meio, sacola à direita. (08/10/2026) */
+  .topo-in{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0}
+  .logo{flex-direction:row;align-items:center;gap:8px;text-align:left}
+  .logo svg{width:34px;height:28px;flex:none}
+  .logo b{font-size:17px;margin:0;white-space:nowrap}
+  .logo small{display:none}
+  .voltar{font-size:0;gap:0;padding:9px 11px;flex:none}
+  .voltar svg,.voltar .ico{width:20px;height:20px}
+  .trilha{font-size:12.5px}
 }
 
 /* ───────── listagem: todos os produtos ───────── */
