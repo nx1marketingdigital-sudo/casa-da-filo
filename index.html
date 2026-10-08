@@ -1066,7 +1066,20 @@ pinta(); marca(); mostraCena(ambAtual);
 /* voltando de uma página de produto: #sala reabre a cena de onde a pessoa saiu */
 (function volta(){
   const id = (location.hash || "").replace("#", "");
-  if (AMBIENTES[id]) { mostraCena(id); abreTela("telaCena"); }
+  if (AMBIENTES[id]) { mostraCena(id); abreTela("telaCena"); return; }
+
+  /* Âncora de seção (#ambientes, #produtos, #sobre): o salto nativo do navegador
+     perde a corrida com as fotos — a página ainda está crescendo quando ele rola,
+     e a pessoa acaba na entrada imersiva, atravessando a casa inteira de novo.
+     Rolamos por código, e repetimos depois que tudo carrega. (08/10/2026) */
+  if (["ambientes", "produtos", "sobre"].includes(id)) {
+    const ir = () => {
+      const alvo = document.getElementById(id);
+      if (alvo) alvo.scrollIntoView({ block: "start" });
+    };
+    ir();
+    addEventListener("load", () => { ir(); setTimeout(ir, 400); });
+  }
 })();
 </script>
 </body>
