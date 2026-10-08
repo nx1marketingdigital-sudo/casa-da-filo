@@ -1086,7 +1086,10 @@ pinta(); marca(); mostraCena(ambAtual);
       if (mandou) return;                       // a pessoa assumiu o volante
       const alvo = document.getElementById(id);
       if (alvo && Math.abs(alvo.getBoundingClientRect().top) > 4) {
-        alvo.scrollIntoView({ block: "start" });
+        /* instant, NÃO smooth: o CSS tem scroll-behavior:smooth e cada chamada
+           cancelava a rolagem suave da anterior — o laço brigava consigo mesmo
+           e a página ficava parada na entrada. (08/10/2026) */
+        alvo.scrollIntoView({ block: "start", behavior: "instant" });
       }
       if (++tentativas < 40) setTimeout(fixa, 100);
     };
