@@ -88,6 +88,9 @@ a{color:inherit;text-decoration:none}
 .entrada-marca svg{width:42px;height:42px;color:#E1C98F}
 .entrada-marca b{display:block;font-family:var(--serif);font-size:25px;font-weight:500;line-height:1}
 .entrada-marca small{display:block;margin-top:5px;font-family:var(--serif);font-size:12px;font-style:italic;color:#DDD0B5}
+/* Quem já pulou a introdução não a vê de novo: a marca fica no navegador dele
+   (localStorage) e a seção some antes da primeira pintura, sem piscar. */
+html.sem-intro .entrada{display:none}
 .entrada-pular{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#F7F1E5;
   border-bottom:1px solid rgba(244,231,197,.5);padding:5px 0}
 .entrada-intro{position:absolute;z-index:4;left:clamp(24px,8vw,128px);top:50%;transform:translateY(-48%);
@@ -460,6 +463,17 @@ a{color:inherit;text-decoration:none}
 <link rel="apple-touch-icon" href="favicon-180.png">
 <meta name="theme-color" content="#3A4630">
 </head>
+<script>
+/* Roda antes de qualquer pintura: se esta pessoa já pulou a introdução alguma vez,
+   a casa abre direto na loja. A marca vive no navegador dela — trocar de navegador,
+   de aparelho ou limpar os dados do site faz a introdução voltar; trocar de IP não
+   muda nada, porque não é o IP que guarda isso. (08/10/2026) */
+try {
+  if (localStorage.getItem("casa-da-filo:intro-vista") === "1") {
+    document.documentElement.classList.add("sem-intro");
+  }
+} catch (e) { /* navegação privada ou dados bloqueados: mostra a introdução */ }
+</script>
 <body>
 
 <aside class="aviso-modelo" style="display:none">
@@ -489,7 +503,7 @@ a{color:inherit;text-decoration:none}
   </g>
   <circle cx="98" cy="76" r="3" fill="#C7A25A"/>
 </svg><span><b>Casa da Filó</b><small>Sua casa mais bonita de viver.</small></span></span>
-      <a class="entrada-pular" href="#loja">Pular introdução</a>
+      <a class="entrada-pular" href="#loja" id="pularIntro">Pular introdução</a>
     </div>
 
     <div class="entrada-intro" id="entradaIntro">
@@ -562,7 +576,7 @@ a{color:inherit;text-decoration:none}
       <a class="acao" href="https://acasadafilo.lojavirtualnuvem.com.br/" target="_blank" rel="noopener"><span class="env"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9.5" cy="19.5" r="1.6"/><circle cx="17" cy="19.5" r="1.6"/><path d="M2.5 3h2.6l2.7 12.1h11L21 7H6.3"/></svg></span>Carrinho</a>
     </div>
   </div>
-  <nav class="menu"><a href="#ambientes" data-amb-card="sala">Sala</a><a href="#ambientes" data-amb-card="cozinha">Cozinha</a><a href="#ambientes" data-amb-card="quarto">Quarto</a><a href="#ambientes" data-amb-card="banheiro">Banheiro</a><a href="#ambientes" data-amb-card="escritorio">Escritório</a><a href="#ambientes" data-amb-card="lavanderia">Lavanderia</a><a href="#ambientes" data-amb-card="varanda">Varanda</a><a href="#ambientes" data-amb-card="pet">Cantinho Pet</a><a href="#novidades" data-tela="telaNovidades">Novidades</a><a href="#promocoes" data-tela="telaPromocoes">Promoções</a><a href="#sobre" data-rolar="#sobre">Sobre nós</a></nav>
+  <nav class="menu"><a href="#ambientes" data-amb-card="sala">Sala</a><a href="#ambientes" data-amb-card="cozinha">Cozinha</a><a href="#ambientes" data-amb-card="quarto">Quarto</a><a href="#ambientes" data-amb-card="banheiro">Banheiro</a><a href="#ambientes" data-amb-card="escritorio">Escritório</a><a href="#ambientes" data-amb-card="lavanderia">Lavanderia</a><a href="#ambientes" data-amb-card="varanda">Varanda</a><a href="#ambientes" data-amb-card="pet">Cantinho Pet</a><a href="produtos/" >Todos os produtos</a><a href="#novidades" data-tela="telaNovidades">Novidades</a><a href="#sobre" data-rolar="#sobre">Sobre nós</a></nav>
 </div></header>
 
 <!-- 4 · ambientes -->
@@ -1066,6 +1080,17 @@ document.querySelectorAll('a[href^="produtos/"]').forEach(a => a.addEventListene
 })();
 
 pinta(); marca(); mostraCena(ambAtual);
+
+/* "Pular introdução": além de pular agora, lembra a escolha para as próximas visitas */
+(function lembraPulo(){
+  const botao = document.getElementById("pularIntro");
+  if (!botao) return;
+  botao.addEventListener("click", () => {
+    try { localStorage.setItem("casa-da-filo:intro-vista", "1"); } catch (e) {}
+    document.documentElement.classList.add("sem-intro");
+    requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: "instant" }));
+  });
+})();
 
 /* voltando de uma página de produto: #sala reabre a cena de onde a pessoa saiu */
 (function volta(){
