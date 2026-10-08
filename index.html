@@ -220,7 +220,10 @@ a{color:inherit;text-decoration:none}
 .fav{background:none;border:0;padding:2px;color:#8A8574}
 .fav:hover,.fav[aria-pressed="true"]{color:var(--terra)}
 .fav[aria-pressed="true"] .ico{fill:currentColor}
-.card .preco{font-size:19px;font-weight:700;margin-top:9px;color:#33322B}
+/* preço e botão ancorados na base: o card mais alto manda, e os demais
+   esticam (grid faz stretch). Sem isto, um título de 3 linhas desce o
+   botão daquele card e quebra a linha do carrossel — visto em 08/10. */
+.card .preco{font-size:19px;font-weight:700;margin-top:auto;padding-top:9px;color:#33322B}
 .card .parc{font-size:12.5px;color:#7C7767;margin-top:2px}
 .card .add{margin-top:12px;width:100%;background:transparent;border:1px solid #CFC5AE;border-radius:8px;
   padding:10px;font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:#4B4A3D;transition:.2s}
