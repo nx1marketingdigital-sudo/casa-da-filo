@@ -209,6 +209,9 @@ table.esp td{font-weight:700}
 .limpar{background:none;border:0;color:var(--forest);border-bottom:1px solid var(--gold);
   font:inherit;font-size:14px;padding:0 0 1px;margin-top:14px}
 .grade .card{display:flex;flex-direction:column}
+/* display:flex SOBREPÕE o atributo hidden — sem esta linha o filtro calcula
+   certo (o contador muda) e nenhum card some da tela. Visto em 08/10. */
+.grade .card[hidden]{display:none}
 .grade .card .foto{position:relative;display:block;border-radius:12px;overflow:hidden;background:#EFEAE0;
   aspect-ratio:1;box-shadow:0 12px 26px -20px rgba(58,70,48,.6)}
 .grade .card .foto img,.grade .card .foto svg{width:100%;height:100%;display:block;object-fit:contain;
