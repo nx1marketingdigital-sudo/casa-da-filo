@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Veja na sua casa | Casa da Filó</title>
+  <style>
+    :root { color-scheme: light; font-family: system-ui,-apple-system,Segoe UI,sans-serif; color:#31342b; background:#f7f5ef; }
+    * { box-sizing:border-box; }
+    body { margin:0; }
+    .filo { max-width:1050px; margin:auto; padding:24px 16px 42px; }
+    h1 { margin:0 0 5px; font-family:Georgia,serif; font-weight:normal; font-size:clamp(29px,4vw,43px); }
+    p { line-height:1.5; }
+    .sub { margin:0 0 22px; color:#65685e; }
+    .layout { display:grid; grid-template-columns:minmax(0,1fr) 270px; gap:20px; align-items:start; }
+    .board,.controls { background:#fff; border:1px solid #e6e3d9; border-radius:14px; padding:14px; box-shadow:0 6px 25px #33333309; }
+    canvas { display:block; width:100%; height:auto; min-height:240px; background:#ebe9e2; border-radius:9px; touch-action:none; cursor:grab; }
+    canvas:active { cursor:grabbing; }
+    .hint { margin:9px 2px 2px; font-size:13px; color:#6a6b63; }
+    label { display:block; font-weight:600; margin:15px 0 6px; }
+    input[type=range], select { width:100%; accent-color:#637355; }
+    select { padding:10px; border-radius:8px; border:1px solid #c9cbbf; background:#fff; }
+    .buttons { display:flex; flex-wrap:wrap; gap:9px; margin-top:17px; }
+    button,.button-link { display:inline-flex; justify-content:center; align-items:center; padding:11px 14px; border-radius:8px; border:1px solid #657357; background:#657357; color:white; font:600 14px system-ui; text-decoration:none; cursor:pointer; }
+    button.secondary,.button-link.secondary { color:#48583d; background:#fff; }
+    button:disabled { opacity:.45; cursor:not-allowed; }
+    button:focus-visible, select:focus-visible, input:focus-visible, a:focus-visible { outline:3px solid #c9985f; outline-offset:3px; }
+    .small { font-size:12px; color:#666a60; margin:15px 0 0; }
+    .status { min-height:1.3em; margin:12px 0 0; color:#9c442f; font-size:13px; }
+    [hidden] { display:none!important; }
+    @media(max-width:730px) { .layout { grid-template-columns:1fr; } .controls { order:-1; } }
+  </style>
+</head>
+<body>
+<main class="filo">
+  <h1>Veja na sua casa</h1>
+  <p class="sub">Escolha uma foto do seu ambiente e experimente os produtos da Casa da Filó.</p>
+  <div class="layout">
+    <section class="board" aria-label="Prévia da simulação">
+      <canvas id="scene" width="1000" height="650" aria-label="Prévia da foto com o produto"></canvas>
+      <p class="hint">Arraste o produto na imagem. O tamanho é ilustrativo; confira as medidas na página do produto.</p>
+    </section>
+    <section class="controls" aria-label="Controles da simulação">
+      <div class="buttons"><button id="roomButton" type="button">Escolher foto da sala</button></div>
+      <input id="roomFile" type="file" accept="image/jpeg,image/png,image/webp" hidden>
+      <label for="productSelect">Produto</label>
+      <select id="productSelect"><option value="">Selecione um produto</option></select>
+      <div id="devUpload" hidden>
+        <div class="buttons"><button id="productButton" class="secondary" type="button">Testar recorte do produto</button></div>
+        <input id="productFile" type="file" accept="image/png,image/webp" hidden>
+        <p class="small">Modo de teste: carregue um PNG ou WebP com transparência. A agência deve cadastrar os produtos antes de publicar.</p>
+      </div>
+      <label for="size">Tamanho na foto</label>
+      <input id="size" type="range" min="5" max="70" value="24" aria-label="Tamanho do produto">
+      <label for="rotation">Girar</label>
+      <input id="rotation" type="range" min="-30" max="30" value="0" aria-label="Rotação do produto">
+      <div class="buttons">
+        <button id="original" class="secondary" type="button" disabled>Ver original</button>
+        <button id="download" type="button" disabled>Baixar simulação</button>
+        <button id="melhorarIA" type="button" disabled>Encaixar na cena com IA</button>
+        <button id="voltarAoMeu" class="secondary" type="button" hidden>Voltar ao meu</button>
+        <a id="productLink" class="button-link secondary" href="#" target="_blank" rel="noopener noreferrer" hidden>Ver produto na loja</a>
+      </div>
+      <p id="status" class="status" role="status" aria-live="polite"></p>
+      <p class="small">Enquanto você posiciona a peça, sua foto fica só neste navegador. <strong>Se você
+      usar o botão "Encaixar na cena com IA", a imagem é enviada para o serviço de inteligência
+      artificial que faz o acabamento</strong> — ela não é guardada por nós nem usada para outra
+      coisa. O resto da ferramenta funciona sem enviar nada.</p>
+    </section>
+  </div>
+</main>
+<script>
+/*
+  CONFIGURAÇÃO DA AGÊNCIA
+  1. Publique este arquivo em HTTPS no domínio do site.
+  2. Preencha PRODUCTS com fotos REAIS recortadas em PNG/WebP transparente.
+     Hospede imagens no mesmo domínio, ou configure CORS para permitir exportação.
+  3. Cada variante/cor deve ter entrada própria e URL do SKU correspondente.
+  4. Para inserir: <iframe src="/simulador/Simulador_Casa_da_Filo.html"
+     title="Simule produtos da Casa da Filó na sua casa"
+     style="width:100%;height:930px;border:0" loading="lazy"></iframe>
+     Ajuste a altura/responsividade conforme o site; uma rota dedicada é preferível.
+  5. Após cadastrar produtos, altere DEMO_MODE para false.
+  6. Integração dinâmica com estoque/preços depende da implementação da agência.
+  Este arquivo implementa COMPOSIÇÃO 2D local, sem IA e sem envio de fotos.
+*/
+const DEMO_MODE = false;
+/* Produtos da Casa da Filó. A largura em CENTÍMETROS é o que permite mostrar a
+   peça na escala certa dentro da foto do visitante.
+   Medidas conferidas em 14/10/2026: as três Duna e o Abraço vêm das fichas do
+   cérebro; o Kit Lavabo (bandeja 29 × 17 cm) e a Lixeira (26 cm de altura por
+   17 de diâmetro) vêm da descrição na própria loja.
+   Recortes feitos com rembg: isnet-general-use nos quatro, e birefnet-general
+   no Kit Lavabo, porque os outros modelos comiam a bandeja. */
+const PRODUCTS = [
+  { id:'conjunto-abraco', name:'Conjunto Orgânico Abraço em Cerâmica',
+    image:'produtos/conjunto-abraco.png',
+    url:'https://acasadafilo.lojavirtualnuvem.com.br/produtos/conjunto-organico-abraco/',
+    widthCm:25 },
+  { id:'vaso-duna-alto', name:'Vaso Duna Alto em Cerâmica Off-White',
+    image:'produtos/vaso-duna-alto.png',
+    url:'https://acasadafilo.lojavirtualnuvem.com.br/produtos/vaso-duna-alto/',
+    widthCm:20 },
+  { id:'vaso-duna-arredondado', name:'Vaso Duna Arredondado em Cerâmica Off-White',
+    image:'produtos/vaso-duna-arredondado.png',
+    url:'https://acasadafilo.lojavirtualnuvem.com.br/produtos/vaso-duna-arredondado/',
+    widthCm:18 },
+  { id:'kit-lavabo', name:'Kit Lavabo Orgânico em Concreto — Bege',
+    image:'produtos/kit-lavabo.png',
+    url:'https://acasadafilo.lojavirtualnuvem.com.br/produtos/kit-lavabo-organico-concreto-bege/',
+    widthCm:29 },
+  { id:'lixeira-flor', name:'Lixeira Decorativa Flor Cobre 3 L — Verde',
+    image:'produtos/lixeira-flor.png',
+    url:'https://acasadafilo.lojavirtualnuvem.com.br/produtos/lixeira-decorativa-flor-cobre-3l-verde/',
+    widthCm:17 },
+  /* FALTA o Vaso Duna Médio: não existe foto dele sozinho — a galeria da loja
+     usa a foto do Alto. Pendência aberta com a Elimarce desde 08/10. */
+];
+
+const $ = id => document.getElementById(id);
+const canvas = $('scene'), ctx = canvas.getContext('2d');
+const roomFile = $('roomFile'), productFile = $('productFile');
+const status = $('status');
+let room=null, item=null, itemURL='', showOriginal=false, dragging=false;
+let x=.5, y=.67, size=.24, angle=0;
+let roomObjectURL=null, itemObjectURL=null;
+const MAX_FILE_BYTES=12*1024*1024;
+
+function message(s) { status.textContent=s; }
+/* ─────────────────────── sombra de contato ───────────────────────
+   O que faz a peça parecer APOIADA, e não colada por cima, é a sombra onde ela
+   encosta na superfície. Isto desenha essa sombra: uma elipse escura sob a base,
+   mais fechada e densa no contato, mais aberta e fraca em volta.
+
+   Por que não é a IA que faz isso: testado em 14/10/2026, a IA levou 79 s, custou
+   crédito, mandou a foto do cliente para fora e devolveu uma mancha amarelada.
+   Isto leva 5 ms, não sai do navegador e não custa nada. (Ver o cabeçalho do
+   worker-simulador-ia.js para os números dos quatro testes.)
+
+   As proporções acompanham o tamanho da peça, então vale para um vaso pequeno
+   na bancada e para um grande no chão. */
+function sombraDeContato(cx, cy, w, h) {
+  const base = cy + h / 2;                    // linha onde a peça encosta
+  const rx = w * 0.56;
+  const ry = Math.max(w * 0.070, 3);
+
+  ctx.save();
+  ctx.globalCompositeOperation = 'multiply';  // escurece o que já está ali
+
+  // 1) halo difuso, levemente deslocado para longe da luz
+  let g = ctx.createRadialGradient(cx + w*0.08, base, 0, cx + w*0.08, base, rx*1.7);
+  g.addColorStop(0,    'rgba(64,56,46,0.26)');
+  g.addColorStop(0.45, 'rgba(64,56,46,0.11)');
+  g.addColorStop(1,    'rgba(64,56,46,0)');
+  ctx.beginPath();
+  ctx.ellipse(cx + w*0.08, base, rx*1.7, ry*3.0, 0, 0, Math.PI*2);
+  ctx.fillStyle = g; ctx.fill();
+
+  // 2) linha de contato: estreita, colada na base e bem mais escura.
+  //    É ela que convence o olho de que a peça está apoiada.
+  g = ctx.createRadialGradient(cx, base - ry*0.15, 0, cx, base - ry*0.15, rx*0.92);
+  g.addColorStop(0,    'rgba(44,38,30,0.62)');
+  g.addColorStop(0.35, 'rgba(44,38,30,0.38)');
+  g.addColorStop(0.75, 'rgba(44,38,30,0.12)');
+  g.addColorStop(1,    'rgba(44,38,30,0)');
+  ctx.beginPath();
+  ctx.ellipse(cx, base - ry*0.15, rx*0.92, ry, 0, 0, Math.PI*2);
+  ctx.fillStyle = g; ctx.fill();
+
+  ctx.restore();
+}
+
+function draw() {
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle='#ebe9e2'; ctx.fillRect(0,0,canvas.width,canvas.height);
+  if (!room) {
+    ctx.fillStyle='#697063'; ctx.textAlign='center'; ctx.font='22px system-ui';
+    ctx.fillText('Selecione uma foto do ambiente',canvas.width/2,canvas.height/2);
+    return;
+  }
+  ctx.drawImage(room,0,0,canvas.width,canvas.height);
+  if (item && !showOriginal) {
+    const w=canvas.width*size, h=w*item.naturalHeight/item.naturalWidth;
+    const cx=x*canvas.width, cy=y*canvas.height;
+    sombraDeContato(cx, cy, w, h);
+    ctx.save(); ctx.translate(cx,cy); ctx.rotate(angle*Math.PI/180);
+    ctx.drawImage(item,-w/2,-h/2,w,h); ctx.restore();
+  }
+}
+function updateButtons() {
+  $('download').disabled=!(room&&item);
+  $('original').disabled=!(room&&item);
+  $('original').textContent=showOriginal?'Ver simulação':'Ver original';
+  $('productLink').hidden=!itemURL;
+  if(itemURL) $('productLink').href=itemURL;
+  const liga=$('melhorarIA'); if(liga) liga.disabled=!(room&&item);
+}
+function loadImage(src, crossOrigin=false) {
+  return new Promise((resolve,reject)=>{
+    const img=new Image();
+    if(crossOrigin) img.crossOrigin='anonymous';
+    img.onload=()=>resolve(img); img.onerror=()=>reject(new Error('Não foi possível abrir esta imagem.'));
+    img.src=src;
+  });
+}
+function validFile(file) {
+  if(!file || !['image/jpeg','image/png','image/webp'].includes(file.type)) throw Error('Escolha uma imagem JPG, PNG ou WebP.');
+  if(file.size>MAX_FILE_BYTES) throw Error('A imagem deve ter no máximo 12 MB.');
+}
+async function chooseRoom(file) {
+  try {
+    validFile(file);
+    const url=URL.createObjectURL(file), img=await loadImage(url);
+    if(roomObjectURL) URL.revokeObjectURL(roomObjectURL);
+    roomObjectURL=url; room=img;
+    const max=1600, factor=Math.min(1,max/Math.max(img.naturalWidth,img.naturalHeight));
+    canvas.width=Math.round(img.naturalWidth*factor); canvas.height=Math.round(img.naturalHeight*factor);
+    showOriginal=false; updateButtons(); draw(); message('Foto carregada. Escolha um produto e arraste na imagem.');
+  } catch(e) { message(e.message); }
+}
+async function chooseProduct(src, url='', isLocal=false) {
+  try {
+    const img=await loadImage(src,!isLocal);
+    item=img; itemURL=url; x=.5; y=.67; showOriginal=false;
+    updateButtons(); draw(); message('Produto carregado. Ajuste o tamanho e a posição.');
+  } catch(e) { message('Não foi possível carregar o produto. Verifique o endereço da imagem e a configuração CORS.'); }
+}
+function pointerPosition(event) {
+  const rect=canvas.getBoundingClientRect();
+  return {x:(event.clientX-rect.left)/rect.width,y:(event.clientY-rect.top)/rect.height};
+}
+canvas.addEventListener('pointerdown',event=>{
+  if(!room||!item||showOriginal) return;
+  const p=pointerPosition(event), w=size, h=w*item.naturalHeight/item.naturalWidth*canvas.width/canvas.height;
+  if(Math.abs(p.x-x)<w*.65 && Math.abs(p.y-y)<h*.65) {
+    dragging=true; canvas.setPointerCapture(event.pointerId); event.preventDefault();
+  }
+});
+canvas.addEventListener('pointermove',event=>{
+  if(!dragging) return;
+  const p=pointerPosition(event);
+  x=Math.max(0,Math.min(1,p.x)); y=Math.max(0,Math.min(1,p.y)); draw();
+});
+function stopDrag(){dragging=false;}
+canvas.addEventListener('pointerup',stopDrag); canvas.addEventListener('pointercancel',stopDrag);
+$('roomButton').onclick=()=>roomFile.click();
+roomFile.onchange=()=>{if(roomFile.files[0]) chooseRoom(roomFile.files[0]); roomFile.value='';};
+$('productButton').onclick=()=>productFile.click();
+productFile.onchange=async()=>{
+  const file=productFile.files[0]; if(!file)return;
+  try {
+    validFile(file);
+    if(itemObjectURL)URL.revokeObjectURL(itemObjectURL);
+    itemObjectURL=URL.createObjectURL(file);
+    $('productSelect').value=''; await chooseProduct(itemObjectURL,'',true);
+  }catch(e){message(e.message);}
+  productFile.value='';
+};
+$('productSelect').onchange=()=>{
+  const p=PRODUCTS.find(p=>p.id===$('productSelect').value);
+  if(p) chooseProduct(p.image,p.url);
+  else {item=null;itemURL='';updateButtons();draw();}
+};
+$('size').oninput=e=>{size=Number(e.target.value)/100;draw();};
+$('rotation').oninput=e=>{angle=Number(e.target.value);draw();};
+$('original').onclick=()=>{showOriginal=!showOriginal;updateButtons();draw();};
+$('download').onclick=()=>{
+  if(!room||!item)return;
+  if(showOriginal){showOriginal=false;updateButtons();draw();}
+  try {
+    const a=document.createElement('a'); a.download='simulacao-casa-da-filo.png';
+    a.href=canvas.toDataURL('image/png'); document.body.appendChild(a);a.click();a.remove();
+  }catch(e){message('Não foi possível baixar. Hospede as fotos dos produtos no mesmo domínio ou configure CORS.');}
+};
+for(const p of PRODUCTS) {
+  const option=document.createElement('option'); option.value=p.id;option.textContent=p.name;
+  $('productSelect').appendChild(option);
+}
+
+/* ─────────── acabamento com IA (teste pedido pela Elimarce, 13/10/2026) ───────────
+   A peça já foi posicionada e dimensionada PELO CLIENTE. A IA entra só para encaixar:
+   sombra, luz e perspectiva da base. O endereço abaixo é o worker que guarda a chave
+   da OpenAI — a chave nunca aparece aqui, porque esta página é pública.
+   Enquanto PONTE_IA estiver vazio, o botão fica escondido e nada muda. */
+const PONTE_IA = '';
+const TETO_LOCAL = 3;          // trava no navegador, além da trava do worker
+let composicaoOriginal = null; // para o "voltar ao meu"
+
+function usosHoje() {
+  try {
+    const bruto = JSON.parse(localStorage.getItem('filo-ia') || '{}');
+    return bruto.dia === new Date().toDateString() ? (bruto.n || 0) : 0;
+  } catch (e) { return 0; }
+}
+function contaUso() {
+  try {
+    localStorage.setItem('filo-ia', JSON.stringify({ dia: new Date().toDateString(), n: usosHoje() + 1 }));
+  } catch (e) {}
+}
+
+$('melhorarIA').onclick = async () => {
+  if (!room || !item) return;
+  if (usosHoje() >= TETO_LOCAL) {
+    message('Você já usou o acabamento com IA 3 vezes hoje. O modo normal continua liberado.');
+    return;
+  }
+  const botao = $('melhorarIA');
+  botao.disabled = true;
+  const rotulo = botao.textContent;
+  botao.textContent = 'Encaixando…';
+  message('A IA está encaixando a peça na cena. Isso leva alguns segundos.');
+
+  if (showOriginal) { showOriginal = false; updateButtons(); draw(); }
+
+  try {
+    composicaoOriginal = canvas.toDataURL('image/png');
+    const r = await fetch(PONTE_IA, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        imagem: composicaoOriginal,
+        formato: canvas.height > canvas.width ? 'retrato' : 'paisagem',
+      }),
+    });
+    const dados = await r.json();
+    if (!r.ok) throw new Error(dados.erro || 'A IA não respondeu.');
+
+    const pronta = await loadImage(dados.imagem);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(pronta, 0, 0, canvas.width, canvas.height);
+    contaUso();
+    message('Pronto. Compare com o seu posicionamento no botão "Voltar ao meu".');
+    $('voltarAoMeu').hidden = false;
+  } catch (e) {
+    message(e.message || 'Não deu certo agora. Tente de novo em instantes.');
+  } finally {
+    botao.textContent = rotulo;
+    botao.disabled = false;
+  }
+};
+
+$('voltarAoMeu').onclick = async () => {
+  if (!composicaoOriginal) return;
+  const img = await loadImage(composicaoOriginal);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+  message('Este é o seu posicionamento, sem o acabamento da IA.');
+};
+
+/* Sem ponte configurada, a ferramenta é exatamente a de antes. */
+if (!PONTE_IA) { $('melhorarIA').hidden = true; $('voltarAoMeu').hidden = true; }
+
+$('devUpload').hidden=!DEMO_MODE;
+draw();updateButtons();
+</script>
+</body>
+</html>
