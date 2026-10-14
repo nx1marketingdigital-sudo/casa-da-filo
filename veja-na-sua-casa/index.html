@@ -62,7 +62,7 @@
         <a id="productLink" class="button-link secondary" href="#" target="_blank" rel="noopener noreferrer" hidden>Ver produto na loja</a>
       </div>
       <p id="status" class="status" role="status" aria-live="polite"></p>
-      <p class="small">Enquanto você posiciona a peça, sua foto fica só neste navegador. <strong>Se você
+      <p class="small" id="avisoPrivacidade">Enquanto você posiciona a peça, sua foto fica só neste navegador. <strong>Se você
       usar o botão "Encaixar na cena com IA", a imagem é enviada para o serviço de inteligência
       artificial que faz o acabamento</strong> — ela não é guardada por nós nem usada para outra
       coisa. O resto da ferramenta funciona sem enviar nada.</p>
@@ -347,8 +347,16 @@ $('voltarAoMeu').onclick = async () => {
   message('Este é o seu posicionamento, sem o acabamento da IA.');
 };
 
-/* Sem ponte configurada, a ferramenta é exatamente a de antes. */
-if (!PONTE_IA) { $('melhorarIA').hidden = true; $('voltarAoMeu').hidden = true; }
+/* Sem ponte configurada, a ferramenta é exatamente a de antes — e o aviso de
+   privacidade tem de dizer a verdade de AGORA, não a de um botão escondido.
+   Sem IA a foto não sai do navegador; com IA, sai. O texto acompanha. */
+if (!PONTE_IA) {
+  $('melhorarIA').hidden = true;
+  $('voltarAoMeu').hidden = true;
+  const aviso = document.getElementById('avisoPrivacidade');
+  if (aviso) aviso.innerHTML = 'Sua foto é processada somente neste navegador e ' +
+    '<strong>não é enviada a servidor nenhum</strong> — nem ao nosso, nem a terceiros.';
+}
 
 $('devUpload').hidden=!DEMO_MODE;
 draw();updateButtons();
