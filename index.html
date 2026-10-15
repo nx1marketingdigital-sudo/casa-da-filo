@@ -481,6 +481,19 @@ html.sem-intro .entrada{display:none}
 .zap span{white-space:nowrap}
 @media(max-width:620px){.zap{right:14px;bottom:14px;padding:12px}.zap span{display:none}}
 @media (prefers-reduced-motion:reduce){.zap{transition:none}}
+
+/* aviso de cookies — discreto, no rodapé, sem cobrir conteúdo */
+.lgpd{position:fixed;left:0;right:0;bottom:0;z-index:70;background:rgba(58,70,48,.97);
+  color:#F6F3E9;padding:14px 18px;display:none;gap:14px;align-items:center;justify-content:center;
+  flex-wrap:wrap;font:400 13.5px/1.45 var(--sans);box-shadow:0 -4px 20px rgba(0,0,0,.14)}
+.lgpd.on{display:flex}
+.lgpd p{margin:0;max-width:640px}
+.lgpd a{color:#E7DDD0;text-decoration:underline}
+.lgpd .bts{display:flex;gap:9px;flex-wrap:wrap}
+.lgpd button{border:0;border-radius:8px;padding:10px 18px;font:600 13px var(--sans);cursor:pointer}
+.lgpd .sim{background:#C7A25A;color:#2C2A22}
+.lgpd .nao{background:transparent;color:#F6F3E9;border:1px solid rgba(246,243,233,.45)}
+@media(max-width:620px){.lgpd{padding:12px 14px;font-size:13px}.lgpd .bts{width:100%}.lgpd button{flex:1}}
 </style>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="icon" href="favicon-512.png" sizes="512x512" type="image/png">
@@ -1197,6 +1210,54 @@ pinta(); marca(); mostraCena(ambAtual);
   const z=document.getElementById('zap'); if(!z) return;
   const ver=()=>{ if(scrollY>420) z.classList.add('on'); else z.classList.remove('on'); };
   addEventListener('scroll',ver,{passive:true}); ver();
+})();
+</script>
+<div class="lgpd" id="lgpd" role="dialog" aria-label="Aviso de cookies">
+  <p>Usamos cookies só para entender como a casa é visitada e melhorar o que você vê.
+     Nada de anúncios. <a href="https://acasadafilo.lojavirtualnuvem.com.br/politica-de-privacidade/" target="_blank" rel="noopener">Política de privacidade</a>.</p>
+  <div class="bts">
+    <button class="nao" type="button" id="lgpdNao">Só o necessário</button>
+    <button class="sim" type="button" id="lgpdSim">Aceitar</button>
+  </div>
+</div>
+<script>
+/* ---------- medição, só depois do sim ----------
+   O GA4 usa a MESMA propriedade da loja (G-D7218QFQKB) de propósito: assim a visita ao
+   site e a ida à loja aparecem como um caminho só, e não como duas pessoas.
+   Nada carrega antes do consentimento — é o que a LGPD pede. */
+(function(){
+  const CHAVE='filo-cookies';
+  function ligaMedicao(){
+    if (window.__gaOn) return; window.__gaOn = true;
+    const s=document.createElement('script'); s.async=true;
+    s.src='https://www.googletagmanager.com/gtag/js?id=G-D7218QFQKB';
+    document.head.appendChild(s);
+    window.dataLayer=window.dataLayer||[];
+    window.gtag=function(){dataLayer.push(arguments);};
+    gtag('js', new Date());
+    gtag('config','G-D7218QFQKB',{ anonymize_ip:true });
+    /* o que importa medir aqui: quem sai do site para comprar */
+    document.querySelectorAll('a[href*="lojavirtualnuvem"]').forEach(a=>{
+      a.addEventListener('click',()=>{
+        gtag('event','ir_para_loja',{ destino:a.getAttribute('href') });
+      });
+    });
+    const z=document.getElementById('zap');
+    if(z) z.addEventListener('click',()=>gtag('event','clicou_whatsapp'));
+  }
+  let escolha=null;
+  try{ escolha=localStorage.getItem(CHAVE); }catch(e){}
+  if(escolha==='sim'){ ligaMedicao(); return; }
+  if(escolha==='nao'){ return; }
+  const cx=document.getElementById('lgpd'); if(!cx) return;
+  setTimeout(()=>cx.classList.add('on'), 1200);
+  function responde(v){
+    try{ localStorage.setItem(CHAVE,v); }catch(e){}
+    cx.classList.remove('on');
+    if(v==='sim') ligaMedicao();
+  }
+  document.getElementById('lgpdSim').onclick=()=>responde('sim');
+  document.getElementById('lgpdNao').onclick=()=>responde('nao');
 })();
 </script>
 </body>
