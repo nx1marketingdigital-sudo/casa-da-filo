@@ -888,7 +888,7 @@ const $ = s => document.querySelector(s);
   passos.forEach((passo, i) => passo.onclick = () => {
     const inicio = window.scrollY + raiz.getBoundingClientRect().top;
     const curso = raiz.offsetHeight - window.innerHeight;
-    window.scrollTo({ top: inicio + curso * marcos[i], behavior: "smooth" });
+    rolaSuave(inicio + curso * marcos[i]);
   });
   function preparaVideo(){
     video.muted = true;
@@ -981,6 +981,40 @@ function abreSacola(){}
 /* ---------- telas ---------- */
 function abreTela(id){ $("#" + id).hidden = false; document.body.style.overflow = "hidden"; }
 function fechaTela(id){ $("#" + id).hidden = true; document.body.style.overflow = ""; }
+/* ---------- rolagem suave que funciona nesta página ----------
+   O navegador ignora scroll-behavior:smooth aqui — medido em 15/10/2026: com
+   "smooth" a página fica parada em y=0; com "instant" vai a y=698. A causa é o
+   html ter altura zero e quem rolar ser o body. Como "instant" resolve mas
+   entrega um salto seco, a suavidade é feita à mão, com requestAnimationFrame.
+   Respeita quem pediu menos movimento no sistema. */
+function rolaSuave(destino, duracao) {
+  const inicio = window.scrollY, dist = destino - inicio;
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches || Math.abs(dist) < 8) {
+    window.scrollTo({ top: destino, behavior: "instant" }); return;
+  }
+  const t0 = performance.now(), dur = duracao || Math.min(820, 260 + Math.abs(dist) * 0.42);
+  const suaviza = p => p < .5 ? 4*p*p*p : 1 - Math.pow(-2*p+2, 3)/2;   /* ease-in-out */
+  (function passo(agora) {
+    const p = Math.min(1, (agora - t0) / dur);
+    window.scrollTo({ top: inicio + dist * suaviza(p), behavior: "instant" });
+    if (p < 1) requestAnimationFrame(passo);
+  })(t0);
+}
+function rolaAte(alvo, folga) {
+  if (!alvo) return;
+  rolaSuave(alvo.getBoundingClientRect().top + window.scrollY - (folga || 0));
+}
+function rolaTrilho(el, quanto) {
+  const inicio = el.scrollLeft, t0 = performance.now(), dur = 420;
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) { el.scrollLeft = inicio + quanto; return; }
+  const suaviza = p => 1 - Math.pow(1 - p, 3);
+  (function passo(agora) {
+    const p = Math.min(1, (agora - t0) / dur);
+    el.scrollLeft = inicio + quanto * suaviza(p);
+    if (p < 1) requestAnimationFrame(passo);
+  })(t0);
+}
+
 document.querySelectorAll("[data-fecha]").forEach(b => b.onclick = () => fechaTela(b.dataset.fecha));
 document.querySelectorAll(".tela").forEach(t => t.onclick = e => { if (e.target === t) fechaTela(t.id); });
 document.addEventListener("keydown", e => {
@@ -1000,7 +1034,7 @@ document.querySelectorAll("[data-tela]").forEach(a => a.onclick = ev => {
 document.querySelectorAll("[data-rolar]").forEach(a => a.onclick = ev => {
   ev.preventDefault();
   const alvo = document.querySelector(a.dataset.rolar);
-  if (alvo) alvo.scrollIntoView({ behavior: "smooth", block: "start" });
+  rolaAte(alvo, 12);
 });
 
 /* ---------- fachada ---------- */
@@ -1077,7 +1111,7 @@ $("#palco").onclick = () => { $("#balao").hidden = true; };
    Achado em 15/10/2026, clicando item por item no menu. */
 document.querySelectorAll(".seta[data-rolar]").forEach(b => b.onclick = () => {
   const t = $("#trilho");
-  t.scrollBy({ left: (t.clientWidth / 3) * Number(b.dataset.rolar), behavior: "smooth" });
+  rolaTrilho(t, (t.clientWidth / 3) * Number(b.dataset.rolar));
 });
 document.querySelectorAll(".fav").forEach(f => f.onclick = () => {
   f.setAttribute("aria-pressed", f.getAttribute("aria-pressed") === "true" ? "false" : "true");
