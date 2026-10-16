@@ -1078,8 +1078,17 @@ function resumo(){
     b.href = "https://acasadafilo.lojavirtualnuvem.com.br/" + a.categoria + "/";
     b.textContent = "Ver na loja";
   } else {
+    /* Antes o botão SUMIA aqui — "nada de clique que não leva a lugar nenhum".
+       O receio estava certo, a solução é que ficava curta: quem abria a
+       Lavanderia ou o Cantinho Pet lia "em breve" e não tinha para onde ir.
+       Agora há saída, e ela não promete peça deste canto: leva à coleção
+       inteira. Os dois cômodos estão vazios porque a LOJA não tem peça para
+       eles — medido em 15/10/2026, categorias /lavanderia/ e /cantinho-pet/
+       com zero produto —, então não é falta de cadastro nossa. */
     r.textContent = "Inspiração. Em breve, peças para este canto.";
-    b.hidden = true;
+    b.hidden = false;
+    b.href = "https://acasadafilo.lojavirtualnuvem.com.br/";
+    b.textContent = "Ver a coleção";
   }
 }
 function mostraCena(id){
