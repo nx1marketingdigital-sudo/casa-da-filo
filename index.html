@@ -1311,6 +1311,30 @@ pinta(); marca(); mostraCena(ambAtual);
     });
     const z=document.getElementById('zap');
     if(z) z.addEventListener('click',()=>gtag('event','clicou_whatsapp'));
+
+    /* ---------- Pixel do Meta ----------
+       MESMO id da loja (1027274687043932, lido do HTML dela em 17/10/2026). Tem
+       de ser o mesmo: a jornada atravessa dois domínios — a pessoa chega aqui e
+       compra lá —, e com ids diferentes o Meta vê duas pessoas.
+       ⚠️ Fica DENTRO de ligaMedicao() de propósito: só sobe depois do "Aceitar"
+       do aviso de cookies, como o GA4. Pixel solto seria LGPD em cima do que
+       acabou de ser arrumado. */
+    if (!window.__fbqOn) {
+      window.__fbqOn = true;
+      !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+      n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+      document,'script','https://connect.facebook.net/en_US/fbevents.js');
+      fbq('init','1027274687043932');
+      fbq('track','PageView');
+      /* o mesmo par de eventos do GA4, para as duas contas contarem a mesma coisa */
+      document.querySelectorAll('a[href*="lojavirtualnuvem"]').forEach(a=>{
+        a.addEventListener('click',()=>fbq('trackCustom','IrParaLoja',
+          { destino:a.getAttribute('href') }));
+      });
+      if(z) z.addEventListener('click',()=>fbq('trackCustom','ClicouWhatsApp'));
+    }
   }
   let escolha=null;
   try{ escolha=localStorage.getItem(CHAVE); }catch(e){}
