@@ -103,6 +103,17 @@ a{color:inherit;text-decoration:none}
 .compra h1{font-family:var(--serif);font-weight:500;font-size:39px;line-height:1.12;margin:0 0 8px}
 .compra .meta{color:var(--ink-2);font-size:14.5px;margin:0 0 20px}
 .precos{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+/* O que vem na caixa — fica ENTRE o preço e o botão de propósito.
+   O STJ (REsp 1.599.423) trata como indutora a ressalva em destaque
+   desproporcional à promessa: foto grande no topo e letra miúda no rodapé.
+   Aqui a ressalva anda junto do preço, no mesmo tamanho do resto. */
+.na-caixa{margin:18px 0 2px;padding:13px 16px;background:var(--linen);
+  border-radius:12px;border:1px solid rgba(138,123,94,.18);font-size:15px;line-height:1.5}
+.na-caixa b{font-family:var(--serif);font-weight:700;color:#4A4636;
+  display:block;margin-bottom:3px;font-size:14px;letter-spacing:.04em;text-transform:uppercase}
+.na-caixa .vem{color:#3E4630}
+.na-caixa .nvem{display:block;margin-top:7px;padding-top:7px;color:#6E6855;
+  border-top:1px dashed rgba(138,123,94,.28)}
 .preco-de{color:#9A9484;text-decoration:line-through;font-size:16px}
 .preco{font-size:37px;font-weight:700;font-family:var(--serif)}
 .off{background:var(--sage);color:#26301D;border-radius:999px;padding:3px 11px;
@@ -312,6 +323,7 @@ table.esp td{font-weight:700}
       <h1>Conjunto Orgânico Abraço em Cerâmica</h1>
       <p class="meta">Cerâmica fosca · duas peças que se encaixam</p>
       <div class="precos"><span class="preco">R$ 129,90</span></div>
+      <div class="na-caixa"><b>O que vem na caixa</b><span class="vem">1 conjunto Abraço, de duas peças</span><span class="nvem">Folhagens, objetos decorativos não acompanham.</span></div>
       
       <div class="botoes">
         <a class="btn btn-1" href="https://acasadafilo.lojavirtualnuvem.com.br/produtos/conjunto-organico-abraco/" target="_blank" rel="noopener">Comprar na loja</a>
