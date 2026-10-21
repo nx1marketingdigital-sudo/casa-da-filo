@@ -1,2 +1,4 @@
 User-agent: *
 Disallow: /docs/
+
+Sitemap: https://casadafilo.com.br/sitemap.xml
