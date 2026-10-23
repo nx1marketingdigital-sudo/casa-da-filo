@@ -2,6 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
+
 <meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="Jogo 6 Taças de Cristal — 440 ml — Cristal de haste alta · 6 taças de 440 ml, 23,5 cm. R$ 93,90 na Casa da Filó, com entrega para todo o Brasil.">
@@ -460,51 +461,83 @@ document.querySelectorAll(".opcoes").forEach(g => {
 </div>
 <script>
 /* ---------- medição, só depois do sim ----------
-   O GA4 usa a MESMA propriedade da loja (G-D7218QFQKB) de propósito: assim a visita ao
-   site e a ida à loja aparecem como um caminho só, e não como duas pessoas.
-   Nada carrega antes do consentimento — é o que a LGPD pede. */
+   Os ids vêm de PIXEIS, no montar-loja.py — fonte única. Canal sem id não vira
+   script nenhum: não há tag fantasma pesando a página.
+   GA4 e Meta usam a MESMA conta da loja de propósito: a jornada atravessa dois
+   domínios, e com ids diferentes as plataformas contam duas pessoas.
+   Nada sobe antes do consentimento — é o que a LGPD pede. */
 (function(){
   const CHAVE='filo-cookies';
-  function ligaMedicao(){
-    if (window.__gaOn) return; window.__gaOn = true;
-    const s=document.createElement('script'); s.async=true;
-    s.src='https://www.googletagmanager.com/gtag/js?id=G-D7218QFQKB';
-    document.head.appendChild(s);
-    window.dataLayer=window.dataLayer||[];
-    window.gtag=function(){dataLayer.push(arguments);};
-    gtag('js', new Date());
-    gtag('config','G-D7218QFQKB',{ anonymize_ip:true });
-    /* o que importa medir aqui: quem sai do site para comprar */
+  const PX = {"ga4": "G-D7218QFQKB", "meta": "1027274687043932", "google_ads": "", "tiktok": "", "pinterest": ""};
+  /* os dois gestos que valem medir aqui: sair para comprar, e chamar no zap */
+  function liga(aoIrParaLoja, aoZap){
     document.querySelectorAll('a[href*="lojavirtualnuvem"]').forEach(a=>{
-      a.addEventListener('click',()=>{
-        gtag('event','ir_para_loja',{ destino:a.getAttribute('href') });
-      });
+      a.addEventListener('click',()=>aoIrParaLoja(a.getAttribute('href')));
     });
     const z=document.getElementById('zap');
-    if(z) z.addEventListener('click',()=>gtag('event','clicou_whatsapp'));
+    if(z && aoZap) z.addEventListener('click',aoZap);
+  }
+  function ligaMedicao(){
+    if (window.__gaOn) return; window.__gaOn = true;
 
-    /* ---------- Pixel do Meta ----------
-       MESMO id da loja (1027274687043932, lido do HTML dela em 17/10/2026). Tem
-       de ser o mesmo: a jornada atravessa dois domínios — a pessoa chega aqui e
-       compra lá —, e com ids diferentes o Meta vê duas pessoas.
-       ⚠️ Fica DENTRO de ligaMedicao() de propósito: só sobe depois do "Aceitar"
-       do aviso de cookies, como o GA4. Pixel solto seria LGPD em cima do que
-       acabou de ser arrumado. */
-    if (!window.__fbqOn) {
+    /* ---------- Google: GA4 e Ads dividem o mesmo gtag ---------- */
+    if (PX.ga4 || PX.google_ads) {
+      const alvo = PX.ga4 || PX.google_ads;
+      const s=document.createElement('script'); s.async=true;
+      s.src='https://www.googletagmanager.com/gtag/js?id='+alvo;
+      document.head.appendChild(s);
+      window.dataLayer=window.dataLayer||[];
+      window.gtag=function(){dataLayer.push(arguments);};
+      gtag('js', new Date());
+      if (PX.ga4)        gtag('config', PX.ga4, { anonymize_ip:true });
+      if (PX.google_ads) gtag('config', PX.google_ads);
+      liga(d=>gtag('event','ir_para_loja',{ destino:d }),
+           ()=>gtag('event','clicou_whatsapp'));
+    }
+
+    /* ---------- Meta ---------- */
+    if (PX.meta && !window.__fbqOn) {
       window.__fbqOn = true;
       !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
       n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
       n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
       t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
       document,'script','https://connect.facebook.net/en_US/fbevents.js');
-      fbq('init','1027274687043932');
+      fbq('init', PX.meta);
       fbq('track','PageView');
-      /* o mesmo par de eventos do GA4, para as duas contas contarem a mesma coisa */
-      document.querySelectorAll('a[href*="lojavirtualnuvem"]').forEach(a=>{
-        a.addEventListener('click',()=>fbq('trackCustom','IrParaLoja',
-          { destino:a.getAttribute('href') }));
-      });
-      if(z) z.addEventListener('click',()=>fbq('trackCustom','ClicouWhatsApp'));
+      liga(d=>fbq('trackCustom','IrParaLoja',{ destino:d }),
+           ()=>fbq('trackCustom','ClicouWhatsApp'));
+    }
+
+    /* ---------- TikTok ---------- */
+    if (PX.tiktok && !window.__ttqOn) {
+      window.__ttqOn = true;
+      !function(w,d,t){w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];
+      ttq.methods=['page','track','identify','instances','debug','on','off','once','ready','alias','group','enableCookie','disableCookie'];
+      ttq.setAndDefer=function(e,n){e[n]=function(){e.push([n].concat(Array.prototype.slice.call(arguments,0)))}};
+      for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);
+      ttq.instance=function(e){for(var n=ttq._i[e]||[],i=0;i<ttq.methods.length;i++)ttq.setAndDefer(n,ttq.methods[i]);return n};
+      ttq.load=function(e,n){var r='https://analytics.tiktok.com/i18n/pixel/events.js';
+      ttq._i=ttq._i||{};ttq._i[e]=[];ttq._i[e]._u=r;ttq._t=ttq._t||{};ttq._t[e]=+new Date;
+      ttq._o=ttq._o||{};ttq._o[e]=n||{};var o=d.createElement('script');o.type='text/javascript';
+      o.async=!0;o.src=r+'?sdkid='+e+'&lib='+t;var a=d.getElementsByTagName('script')[0];
+      a.parentNode.insertBefore(o,a)};
+      ttq.load(PX.tiktok); ttq.page();}(window,document,'ttq');
+      liga(()=>ttq.track('ClickButton',{ content_name:'IrParaLoja' }),
+           ()=>ttq.track('Contact',{ content_name:'WhatsApp' }));
+    }
+
+    /* ---------- Pinterest ---------- */
+    if (PX.pinterest && !window.__pinOn) {
+      window.__pinOn = true;
+      !function(e){if(!window.pintrk){window.pintrk=function(){window.pintrk.queue.push(
+      Array.prototype.slice.call(arguments))};var n=window.pintrk;n.queue=[],n.version='3.0';
+      var t=document.createElement('script');t.async=!0;t.src=e;
+      var r=document.getElementsByTagName('script')[0];r.parentNode.insertBefore(t,r)}}
+      ('https://s.pinimg.com/ct/core.js');
+      pintrk('load', PX.pinterest); pintrk('page');
+      liga(()=>pintrk('track','custom',{ event_name:'IrParaLoja' }),
+           ()=>pintrk('track','custom',{ event_name:'ClicouWhatsApp' }));
     }
   }
   let escolha=null;
