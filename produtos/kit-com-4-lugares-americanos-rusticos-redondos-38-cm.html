@@ -289,9 +289,12 @@ table.esp td{font-weight:700}
   letter-spacing:.1em;text-transform:uppercase;border-radius:8px}
 .add.esgotado:hover,.btn.esgotado:hover{background:var(--linen);
   border-color:var(--hair);color:var(--ink-2)}
-.aviso-estoque{margin:0 0 14px;padding:12px 14px;border-radius:12px;
-  background:var(--linen);border:1px solid var(--hair);color:var(--ink);
-  font-family:var(--sans);font-size:14px;line-height:1.5}
+/* estado, não caixa: três blocos bege empilhados viravam parede.
+   A informação de que acabou é uma linha; a ação é o botão. */
+.estado-estoque{margin:0 0 14px;display:flex;align-items:center;gap:9px;
+  font-family:var(--sans);font-size:13.5px;letter-spacing:.02em;color:var(--ink-2)}
+.estado-estoque .bolinha{width:7px;height:7px;border-radius:50%;flex:none;
+  background:var(--terra);box-shadow:0 0 0 3px rgba(199,122,90,.18)}
 </style>
 <link rel="icon" href="../favicon.svg" type="image/svg+xml">
 <link rel="icon" href="../favicon-512.png" sizes="512x512" type="image/png">
@@ -347,9 +350,9 @@ table.esp td{font-weight:700}
       <div class="precos"><span class="preco">R$ 99,90</span></div>
       <div class="na-caixa"><b>O que vem na caixa</b><span class="vem">4 americanos redondos</span><span class="nvem">Pratos, talheres, taças, guardanapos, vaso e flores não acompanham.</span></div>
       
-      <p class="aviso-estoque">Esta peça está esgotada no momento. Fale com a gente pelo WhatsApp e avisamos quando ela voltar.</p>
+      <p class="estado-estoque"><span class="bolinha"></span>Esgotada no momento &middot; avisamos assim que voltar</p>
       <div class="botoes">
-        <span class="btn btn-1 esgotado" aria-disabled="true">Esgotado no momento</span>
+        <a class="btn btn-1" href="https://wa.me/5567982080247?text=Ol%C3%A1%2C%20Casa%20da%20Fil%C3%B3%21%20Vi%20no%20site%20que%20a%20pe%C3%A7a%20%22Kit%20com%204%20Lugares%20Americanos%20R%C3%BAsticos%20Redondos%20%E2%80%94%2038%20cm%22%20est%C3%A1%20esgotada.%20Podem%20me%20avisar%20quando%20ela%20voltar%3F">Avise-me quando voltar</a>
         <a class="btn btn-2" href="https://acasadafilo.lojavirtualnuvem.com.br/">Ver a loja inteira</a>
       </div>
       <div class="confianca">
