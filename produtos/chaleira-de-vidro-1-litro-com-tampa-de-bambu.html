@@ -302,9 +302,9 @@ table.esp td{font-weight:700}
   </g>
   <circle cx="98" cy="76" r="3" fill="#C7A25A"/>
 </svg><b>Casa da Filó</b><small>Sua casa mais bonita de viver.</small></a>
-  <a class="voltar" href="../#ambientes"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="m14 6-6 6 6 6"/></svg> Voltar para a vitrine</a>
+  <a class="voltar" id="voltar" href="../#ambientes"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="m14 6-6 6 6 6"/></svg> <span id="voltarTxt">Voltar para a vitrine</span></a>
   <div class="acoes">
-    <a class="acao" href="https://acasadafilo.lojavirtualnuvem.com.br/comprar" target="_blank" rel="noopener"><span class="env"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9.5" cy="19.5" r="1.6"/><circle cx="17" cy="19.5" r="1.6"/><path d="M2.5 3h2.6l2.7 12.1h11L21 7H6.3"/></svg></span>Sacola</a>
+    <a class="acao" href="https://acasadafilo.lojavirtualnuvem.com.br/comprar"><span class="env"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9.5" cy="19.5" r="1.6"/><circle cx="17" cy="19.5" r="1.6"/><path d="M2.5 3h2.6l2.7 12.1h11L21 7H6.3"/></svg></span>Sacola</a>
   </div>
 </div></div></header>
 
@@ -327,8 +327,8 @@ table.esp td{font-weight:700}
       <div class="na-caixa"><b>O que vem na caixa</b><span class="vem">1 chaleira de vidro de 1 litro · 1 tampa de bambu</span><span class="nvem">Chá, louça e demais objetos das fotos não acompanham.</span></div>
       
       <div class="botoes">
-        <a class="btn btn-1" href="https://acasadafilo.lojavirtualnuvem.com.br/produtos/chaleira-de-vidro-1-litro-com-tampa-de-bambu-1p7m9/" target="_blank" rel="noopener">Comprar na loja</a>
-        <a class="btn btn-2" href="https://acasadafilo.lojavirtualnuvem.com.br/" target="_blank" rel="noopener">Ver a loja inteira</a>
+        <a class="btn btn-1" href="https://acasadafilo.lojavirtualnuvem.com.br/produtos/chaleira-de-vidro-1-litro-com-tampa-de-bambu-1p7m9/">Comprar na loja</a>
+        <a class="btn btn-2" href="https://acasadafilo.lojavirtualnuvem.com.br/">Ver a loja inteira</a>
       </div>
       <div class="confianca">
         <div class="conf"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 7h11v9H2zM13 10h4l3 3v3h-7z"/><circle cx="6.5" cy="18" r="1.7"/><circle cx="16.5" cy="18" r="1.7"/></svg><span><b>Frete calculado na hora pelo seu CEP</b>Envio com rastreamento para todo o Brasil</span></div>
@@ -413,8 +413,8 @@ table.esp td{font-weight:700}
 </svg><b style="margin:0">Casa da Filó</b></span>
   <div class="legais">
     <span>© 2026 Casa da Filó</span>
-    <a href="https://acasadafilo.lojavirtualnuvem.com.br/contato/" target="_blank" rel="noopener">Fale Conosco</a>
-    <a href="https://acasadafilo.lojavirtualnuvem.com.br/" target="_blank" rel="noopener">Loja online</a>
+    <a href="https://acasadafilo.lojavirtualnuvem.com.br/contato/">Fale Conosco</a>
+    <a href="https://acasadafilo.lojavirtualnuvem.com.br/">Loja online</a>
   </div>
 </div></footer>
 
@@ -553,6 +553,28 @@ document.querySelectorAll(".opcoes").forEach(g => {
   }
   document.getElementById('lgpdSim').onclick=()=>responde('sim');
   document.getElementById('lgpdNao').onclick=()=>responde('nao');
+})();
+</script>
+<script>
+/* O botao Voltar levava sempre para a home. Quem vinha da lista de produtos
+   perdia o filtro e a posicao na pagina. Pedido da cliente em 23/10/2026.
+   Com history.back() o navegador restaura o scroll e o filtro de graca —
+   mas so quando a pessoa veio mesmo de uma pagina nossa. */
+(function voltarParaDeOndeVeio(){
+  var btn = document.getElementById("voltar");
+  if (!btn) return;
+  var de = document.referrer || "";
+  if (de.indexOf(location.origin) !== 0) return;   /* veio do Google ou do nada: href fixo */
+  var caminho = de.slice(location.origin.length).split("?")[0].split("#")[0];
+  var daLista = /\/produtos\/(index\.html)?$/.test(caminho);
+  var daPeca  = /\/produtos\/(?!index\.html$).+\.html$/.test(caminho);
+  if (daPeca) return;                              /* veio de outra peca: nao embaralha */
+  var txt = document.getElementById("voltarTxt");
+  if (txt) txt.textContent = daLista ? "Voltar para a lista" : "Voltar para a vitrine";
+  btn.setAttribute("href", de);                    /* funciona sem JS de clique tambem */
+  btn.addEventListener("click", function (e) {
+    if (history.length > 1) { e.preventDefault(); history.back(); }
+  });
 })();
 </script>
 </body>
