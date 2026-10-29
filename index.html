@@ -433,6 +433,19 @@ html.sem-intro .entrada{display:none}
   .sec{padding:56px 0}
   .avisos .wrap{gap:20px;font-size:12px}
 }
+/* ───────── menu no telefone: quebra em linhas, não arrasta ─────────
+   Até 29/10/2026 a regra de 900px punha `overflow-x:auto` no menu, e no celular
+   os cômodos depois de "Escritório" só apareciam arrastando — e ninguém arrasta
+   um menu que não parece ter mais nada. Aqui ele volta a quebrar linha, com
+   fonte e respiro menores para caber em poucas linhas. Vale para Safari e Chrome
+   dos dois sistemas: é media query de LARGURA, não depende de navegador.
+   ⚠️ Fica DEPOIS do bloco de 900px de propósito — senão aquele sobrescreve. */
+@media (max-width:620px){
+  .menu{flex-wrap:wrap;overflow-x:visible;white-space:normal;
+        justify-content:center;gap:9px 16px;padding:4px 2px 14px}
+  .menu a{font-size:13.5px;line-height:1.5;padding-bottom:2px}
+}
+
 @media (max-width:620px){
   .wrap{padding:0 18px}
   .ambientes{grid-template-columns:1fr 1fr;gap:14px}
