@@ -58,7 +58,24 @@ a{color:inherit}
 /* ── herói ─────────────────────────────────────────────────────────── */
 .heroi{position:relative;margin-top:18px}
 .heroi-foto{position:relative;border-radius:var(--r);overflow:hidden;min-height:340px}
-.heroi-foto img{width:100%;height:clamp(340px,52vw,560px);object-fit:cover}
+.heroi-foto img{width:100%;height:clamp(340px,52vw,560px);object-fit:cover;
+  /* O passeio pela sala. Em CSS, e não em GIF, de propósito: um GIF desta foto
+     sairia com vários MB e 256 cores — num hero de 1600px fica pior que a foto
+     parada. Aqui o arquivo é o mesmo JPEG, e quem anima é a placa de vídeo.
+     28s e escala pequena: é para parecer respiração, não carrossel. */
+  transform-origin:58% 62%;
+  animation:passeio 28s ease-in-out infinite alternate;
+  will-change:transform}
+@keyframes passeio{
+  from{transform:scale(1.06) translate3d(0,0,0)}
+  to  {transform:scale(1.15) translate3d(-2.2%,-1.6%,0)}
+}
+/* Quem pediu menos movimento no sistema recebe a foto parada. Não é enfeite de
+   acessibilidade: animação de fundo dispara enjoo em quem tem sensibilidade
+   vestibular, e a página continua inteira sem ela. */
+@media (prefers-reduced-motion:reduce){
+  .heroi-foto img{animation:none;transform:scale(1.04)}
+}
 .heroi-véu{position:absolute;inset:0;
   background:linear-gradient(100deg,rgba(58,70,48,.82) 0%,rgba(58,70,48,.55) 46%,rgba(58,70,48,.12) 100%)}
 .heroi-txt{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;
