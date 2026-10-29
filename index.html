@@ -745,10 +745,11 @@ try {
   <circle cx="60" cy="8" r="1.6" fill="currentColor"/>
 </svg>
         <p>Acreditamos que uma casa vai muito além das paredes e dos móveis. Ela é o cenário das nossas melhores lembranças, dos encontros em família, dos momentos de descanso e dos pequenos prazeres do dia a dia.</p>
-        <p>Foi com esse carinho que criamos a Casa da Filó: uma loja dedicada a selecionar produtos que unem beleza, funcionalidade e delicadeza, trazendo mais charme e aconchego para cada ambiente.</p>
-        <p>De detalhes que transformam a mesa posta a peças que dão vida à decoração, cada escolha é pensada para inspirar você a criar espaços que reflitam seu estilo e contem um pouco da sua história.</p>
         <p class="assinatura">Aqui, sua casa é o lugar<br>mais bonito de viver.</p>
-        <button class="cta" type="button" id="entrarCasa2">Conheça nossa história <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15"/><path d="m13.5 6.5 6 5.5-6 5.5"/></svg></button>
+        <!-- Era <button id="entrarCasa2"> e abria a tela da FACHADA: o rótulo dizia
+             "Conheça nossa história" e entregava a visita à casa. Mentia desde antes
+             de a página existir. A entrada da fachada continua no #entrarCasa. -->
+        <a class="cta" href="nossa-historia.html">Conheça nossa história <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15"/><path d="m13.5 6.5 6 5.5-6 5.5"/></svg></a>
       </div>
       <div class="instit-selos">
         <div class="selo-i"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21V7"/><path d="M12 12c0-2.6-1.9-4.6-4.7-4.9C7 9.8 8.9 12 12 12Z"/><path d="M12 16.4c0-2.6 1.9-4.6 4.7-4.9-.3 2.7-2.2 4.9-4.7 4.9Z"/><path d="M12 8.2c0-2.7 1.7-4.7 4.4-5.2-.2 2.8-1.9 5-4.4 5.2Z"/></svg><p>Curadoria exclusiva com produtos de qualidade</p></div>
@@ -1151,7 +1152,6 @@ document.addEventListener("keydown", e => {
   abreSacola(false);
 });
 $("#entrarCasa").onclick = () => abreTela("telaFachada");
-$("#entrarCasa2").onclick = () => abreTela("telaFachada");
 document.querySelectorAll("[data-tela]").forEach(a => a.onclick = ev => {
   ev.preventDefault(); abreTela(a.dataset.tela);
 });
