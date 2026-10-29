@@ -536,6 +536,13 @@ document.querySelectorAll(".opcoes").forEach(g => {
 (function(){
   const CHAVE='filo-cookies';
   const PX = {"ga4": "G-D7218QFQKB", "meta": "1027274687043932", "google_ads": "", "tiktok": "", "pinterest": ""};
+  /* Os dois domínios da MESMA jornada: a pessoa descobre no site e compra na
+     loja. Sem esta lista o gtag trata o pulo como visita nova e carimba a venda
+     como "veio de casadafilo.com.br" — some a origem real (Instagram, Google,
+     Pinterest) justamente na hora em que ela vira dinheiro.
+     A prova de que funciona é o parâmetro `_gl` aparecer no endereço da loja
+     depois do clique; sem `_gl`, a configuração não pegou. */
+  const DOMINIOS = ['casadafilo.com.br','acasadafilo.lojavirtualnuvem.com.br'];
   /* os dois gestos que valem medir aqui: sair para comprar, e chamar no zap */
   function liga(aoIrParaLoja, aoZap){
     document.querySelectorAll('a[href*="lojavirtualnuvem"]').forEach(a=>{
@@ -556,8 +563,12 @@ document.querySelectorAll(".opcoes").forEach(g => {
       window.dataLayer=window.dataLayer||[];
       window.gtag=function(){dataLayer.push(arguments);};
       gtag('js', new Date());
-      if (PX.ga4)        gtag('config', PX.ga4, { anonymize_ip:true });
-      if (PX.google_ads) gtag('config', PX.google_ads);
+      /* o linker é declarado ANTES do config: é ele que manda o gtag carimbar
+         `_gl` nos links que saem para a loja */
+      gtag('set', 'linker', { domains: DOMINIOS, decorate_forms: true });
+      if (PX.ga4)        gtag('config', PX.ga4, { anonymize_ip:true,
+                                                  linker:{ domains: DOMINIOS } });
+      if (PX.google_ads) gtag('config', PX.google_ads, { linker:{ domains: DOMINIOS } });
       liga(d=>gtag('event','ir_para_loja',{ destino:d }),
            ()=>gtag('event','clicou_whatsapp'));
     }
