@@ -79,6 +79,7 @@ a{color:inherit;text-decoration:none}
 .acao .env{position:relative;display:block}
 .menu{display:flex;justify-content:center;gap:38px;padding:6px 0 18px;flex-wrap:wrap}
 .menu a{font-size:15px;color:var(--ink);padding-bottom:3px;border-bottom:1.5px solid transparent}
+.menu .so-estreito{display:none}
 .menu a:hover{color:var(--forest);border-bottom-color:var(--gold)}
 
 /* ───────── 3 · entrada imersiva ───────── */
@@ -442,8 +443,12 @@ html.sem-intro .entrada{display:none}
    ⚠️ Fica DEPOIS do bloco de 900px de propósito — senão aquele sobrescreve. */
 @media (max-width:620px){
   .menu{flex-wrap:wrap;overflow-x:visible;white-space:normal;
-        justify-content:center;gap:9px 16px;padding:4px 2px 14px}
-  .menu a{font-size:13.5px;line-height:1.5;padding-bottom:2px}
+        justify-content:center;gap:9px 10px;padding:4px 2px 14px}
+  .menu a{font-size:13px;line-height:1.5;padding-bottom:2px}
+  /* medido em 375px: 806px de menu para 678px de espaço em duas linhas. O que
+     fecha os 128px é o item mais largo encolher aqui, e só aqui. */
+  .menu .so-largo{display:none}
+  .menu .so-estreito{display:inline}
 }
 
 @media (max-width:620px){
@@ -716,7 +721,7 @@ try {
       <a class="acao" href="https://acasadafilo.lojavirtualnuvem.com.br/comprar"><span class="env"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9.5" cy="19.5" r="1.6"/><circle cx="17" cy="19.5" r="1.6"/><path d="M2.5 3h2.6l2.7 12.1h11L21 7H6.3"/></svg></span>Carrinho</a>
     </div>
   </div>
-  <nav class="menu"><a href="#ambientes" data-amb-card="sala">Sala</a><a href="#ambientes" data-amb-card="cozinha">Cozinha</a><a href="#ambientes" data-amb-card="quarto">Quarto</a><a href="#ambientes" data-amb-card="banheiro">Banheiro</a><a href="#ambientes" data-amb-card="escritorio">Escritório</a><a href="#ambientes" data-amb-card="lavanderia">Lavanderia</a><a href="#ambientes" data-amb-card="varanda">Varanda</a><a href="#ambientes" data-amb-card="pet">Cantinho Pet</a><a href="produtos/" >Todos os produtos</a><a href="#novidades" data-tela="telaNovidades">Novidades</a><a href="nossa-historia.html" >Sobre nós</a></nav>
+  <nav class="menu"><a href="#ambientes" data-amb-card="sala">Sala</a><a href="#ambientes" data-amb-card="cozinha">Cozinha</a><a href="#ambientes" data-amb-card="quarto">Quarto</a><a href="#ambientes" data-amb-card="banheiro">Banheiro</a><a href="#ambientes" data-amb-card="escritorio">Escritório</a><a href="#ambientes" data-amb-card="lavanderia">Lavanderia</a><a href="#ambientes" data-amb-card="varanda">Varanda</a><a href="#ambientes" data-amb-card="pet">Cantinho Pet</a><a href="produtos/" ><span class="so-largo">Todos os produtos</span><span class="so-estreito">Ver tudo</span></a><a href="#novidades" data-tela="telaNovidades">Novidades</a><a href="nossa-historia.html" >Sobre nós</a></nav>
 </div></header>
 
 <!-- 4 · ambientes -->
