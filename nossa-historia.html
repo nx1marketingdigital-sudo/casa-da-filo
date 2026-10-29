@@ -126,6 +126,8 @@ a{color:inherit}
 .assina .ramo{margin:0 auto 20px;width:46px;height:46px;color:var(--sage)}
 .assina p{font-family:var(--serif);font-size:clamp(26px,3.6vw,42px);line-height:1.3;margin:0 auto;
           max-width:16ch;color:var(--forest)}
+.assina .fecho{font-family:var(--sans);font-size:17px;line-height:1.7;color:#4A473C;
+               max-width:48ch;margin:0 auto 26px}
 .assina .fio{width:72px;height:1px;background:var(--gold);margin:26px auto 0}
 
 /* chamada final */
@@ -242,6 +244,7 @@ a{color:inherit}
       <p class="olho">Do detalhe ao ambiente</p>
       <h2>Espaços que contam um pouco da sua história.</h2>
       <p>De detalhes que transformam a mesa posta a peças que dão vida à decoração, cada escolha é pensada para inspirar você a criar espaços que reflitam seu estilo e contem um pouco da sua história.</p>
+      <p>Nosso propósito é ajudar você a descobrir que não é preciso grandes mudanças para transformar um ambiente. Muitas vezes, são os pequenos detalhes que fazem toda a diferença.</p>
     </div>
     <div class="par">
       <img loading="lazy" decoding="async" class="maior" src="img/9296d59762549ef9.jpg" alt="Mesa posta pela Casa da Filó">
@@ -258,7 +261,14 @@ a{color:inherit}
 
 <section class="assina">
   <div class="ramo"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21V7"/><path d="M12 12c0-2.6-1.9-4.6-4.7-4.9C7 9.8 8.9 12 12 12Z"/><path d="M12 16.4c0-2.6 1.9-4.6 4.7-4.9-.3 2.7-2.2 4.9-4.7 4.9Z"/><path d="M12 8.2c0-2.7 1.7-4.7 4.4-5.2-.2 2.8-1.9 5-4.4 5.2Z"/></svg></div>
-  <p>Aqui, sua casa é o lugar mais bonito de viver.</p>
+  <!-- 🔴 Os dois últimos blocos do texto DELA. Saíram da primeira versão porque eu li o
+       arquivo-fonte com `head -30` e construí a página com o que vi: de sete blocos,
+       publiquei quatro, e troquei a assinatura dela pela variante da NX1 ("Aqui, sua casa
+       é o lugar mais bonito de viver"). O arquivo avisava em letras: "Qualquer adaptação
+       para o site precisa preservar as frases que ela escolheu." Achado pelo revisor
+       adversarial em 29/10, antes de a mensagem convidando-a a conferir sair. -->
+  <p class="fecho">Com carinho, queremos fazer parte dos momentos especiais e cotidianos que tornam sua casa verdadeiramente sua.</p>
+  <p>Casa da Filó — sua casa mais bonita de viver.</p>
   <div class="fio"></div>
 </section>
 
