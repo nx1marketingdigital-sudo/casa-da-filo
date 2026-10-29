@@ -527,6 +527,50 @@ document.querySelectorAll(".opcoes").forEach(g => {
      A prova de que funciona é o parâmetro `_gl` aparecer no endereço da loja
      depois do clique; sem `_gl`, a configuração não pegou. */
   const DOMINIOS = ['casadafilo.com.br','acasadafilo.lojavirtualnuvem.com.br'];
+  /* ---------- a origem viaja na mão até a loja ----------
+     O link para a loja é montado no build e é estático. Quem chega pelo
+     Instagram com ?utm_source=instagram e clica em "Comprar na loja" entrega à
+     loja um endereço pelado: a origem morre no salto e a venda nasce órfã.
+     O `_gl` do gtag resolveria — mas só com gtag carregado, consentimento dado
+     e clique de gente: três condições. Este bloco não depende de nenhuma. Lê a
+     UTM que a pessoa trouxe no próprio endereço e a gruda em todo link de saída
+     para a loja, para que a loja e o GA4 recebam a origem por escrito.
+     ⚠️ Carrega o que CHEGOU, nunca o que dá para adivinhar: visita sem UTM sai
+     sem UTM. Deduzir origem do referrer seria inventar dado.
+     Sem cookie, sem terceiro e sem identificar ninguém — é o rótulo de campanha
+     que o próprio visitante trouxe na barra de endereço, repassado adiante. Por
+     isso roda fora do portão do consentimento, que guarda os pixels. */
+  const UTMS = ['utm_source','utm_medium','utm_campaign','utm_content','utm_term'];
+  const SESSAO = 'filo-origem';
+  function origem(){
+    const entrada = new URLSearchParams(location.search), achou = {};
+    UTMS.forEach(k=>{ const v = entrada.get(k); if (v) achou[k] = v; });
+    if (Object.keys(achou).length){
+      /* guardado na sessão, não no localStorage: a origem vale esta visita.
+         Sem isto, quem entra na home e navega até o produto perde a origem no
+         meio do caminho, que é onde a compra acontece. */
+      try{ sessionStorage.setItem(SESSAO, JSON.stringify(achou)); }catch(e){}
+      return achou;
+    }
+    try{ return JSON.parse(sessionStorage.getItem(SESSAO)) || {}; }catch(e){ return {}; }
+  }
+  function carimbaSaidas(){
+    const o = origem(); if (!Object.keys(o).length) return 0;
+    let n = 0;
+    document.querySelectorAll('a[href*="lojavirtualnuvem"]').forEach(a=>{
+      const bruto = a.getAttribute('href'); if (!bruto) return;
+      let u; try{ u = new URL(bruto, location.href); }catch(e){ return; }
+      /* nunca sobrescreve parâmetro que já estava no link */
+      Object.keys(o).forEach(k=>{ if (!u.searchParams.has(k)) u.searchParams.set(k, o[k]); });
+      a.setAttribute('href', u.toString()); n++;
+    });
+    return n;
+  }
+  if (document.readyState === 'loading')
+    document.addEventListener('DOMContentLoaded', carimbaSaidas);
+  else carimbaSaidas();
+  window.__filoOrigem = origem;   /* para conferir no console, sem adivinhação */
+
   /* os dois gestos que valem medir aqui: sair para comprar, e chamar no zap */
   function liga(aoIrParaLoja, aoZap){
     document.querySelectorAll('a[href*="lojavirtualnuvem"]').forEach(a=>{
