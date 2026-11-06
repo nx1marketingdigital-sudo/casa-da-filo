@@ -660,7 +660,7 @@ try {
       <p class="kicker">Boas-vindas à Casa da Filó</p>
       <h1>Entre e viva<br>a experiência!</h1>
       <p>Uma casa ganha vida nos detalhes. Atravesse cada ambiente e encontre os que combinam com a sua.</p>
-      <p style="margin:18px 0 0;font-size:15px;line-height:1.6;opacity:.92">Primeira compra com <b>10% de desconto</b>, usando o cupom <b>BEMVINDOS10</b>.</p>
+      <p style="margin:18px 0 0;font-size:15px;line-height:1.6;opacity:.92">Primeira compra? Use o cupom BEMVINDOS10 e ganhe 10% de desconto</p>
     </div>
 
     <div class="entrada-etapa" id="entradaEtapa" aria-live="polite">
@@ -698,11 +698,20 @@ try {
 <div id="loja"></div>
 
 <!-- 2 · avisos -->
+<!-- ⚠️ 06/11/2026 — A ORDEM AQUI NÃO É ESTÉTICA, É O QUE O CELULAR MOSTRA.
+     No CSS, `@media (max-width:620px){ .avisos .aviso:nth-child(n+2){display:none} }`
+     esconde todo aviso a partir do segundo: no telefone sobra UM, e é o primeiro
+     desta lista. O aviso do cupom estava em quarto e ficava invisível no celular —
+     o Alexandre abriu o site no telefone às 13h33 e viu só a linha do frete.
+     Por isso o cupom vem primeiro: quando há promoção, é ela que sobra na tela
+     pequena; quando `CUPOM` está vazio, `<a class="aviso" href="#promocoes" data-tela="telaPromocoes" style="text-decoration:none;color:inherit"><span style="text-decoration:underline">Primeira compra? Use o cupom BEMVINDOS10 e ganhe 10% de desconto</span></a>` não gera elemento nenhum
+     e o aviso do frete volta a ser o primeiro, sem mexer em mais nada.
+     Quem reordenar esta lista está decidindo o que o celular mostra. -->
 <div class="avisos"><div class="wrap">
+  <a class="aviso" href="#promocoes" data-tela="telaPromocoes" style="text-decoration:none;color:inherit"><span style="text-decoration:underline">Primeira compra? Use o cupom BEMVINDOS10 e ganhe 10% de desconto</span></a>
   <span class="aviso"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 7h11v9H2zM13 10h4l3 3v3h-7z"/><circle cx="6.5" cy="18" r="1.7"/><circle cx="16.5" cy="18" r="1.7"/></svg> Frete calculado na hora pelo seu CEP</span>
   <span class="aviso"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="5.5" width="20" height="13" rx="2.4"/><path d="M2 10h20"/><path d="M5.5 14.5h3"/></svg> Pix, boleto ou cartão</span>
   <span class="aviso"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6"/><path d="M12 7.4V12l3 1.8"/></svg> Devolução em até 7 dias</span>
-  <a class="aviso" href="#promocoes" data-tela="telaPromocoes" style="text-decoration:none;color:inherit">10% na primeira compra com o cupom <b>BEMVINDOS10</b> &middot; <span style="text-decoration:underline">ver as regras</span></a>
 </div></div>
 
 <!-- 3 · header -->
@@ -913,7 +922,7 @@ try {
       <h2>Promoções</h2>
       <p>O que está valendo hoje, e as regras por inteiro.</p>
     </div>
-    <div style="text-align:center;max-width:460px;margin:8px auto 0"><p style="font-size:15px;color:#3A3730;line-height:1.7;margin:0">Na sua primeira compra, <b>10% de desconto</b> com o cupom</p><p style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:26px;letter-spacing:2px;color:#3A3730;background:#F3EFEA;border-radius:10px;padding:14px 18px;margin:14px 0;display:inline-block">BEMVINDOS10</p><p style="font-size:14px;color:#6E6A5C;line-height:1.7;margin:0">É uma vez por cliente, na primeira compra. O código se digita no carrinho, na loja, na hora de fechar o pedido.</p><p style="font-size:14px;color:#6E6A5C;line-height:1.7;margin:14px 0 0">O cupom não acumula com o desconto no frete: quando ele entra no carrinho, vale o desconto do cupom e o frete sai pelo valor cheio.</p><p style="font-size:14px;color:#6E6A5C;line-height:1.7;margin:14px 0 0">Fora dele, os preços da vitrine são os mesmos da loja, sem pegadinha.</p></div>
+    <div style="text-align:center;max-width:460px;margin:8px auto 0"><p style="font-size:15px;color:#3A3730;line-height:1.7;margin:0">Na sua primeira compra, <b>10% de desconto</b> com o cupom</p><p style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:26px;letter-spacing:2px;color:#3A3730;background:#F3EFEA;border-radius:10px;padding:14px 18px;margin:14px 0;display:inline-block">BEMVINDOS10</p><p style="font-size:14px;color:#6E6A5C;line-height:1.7;margin:0">É uma vez por cliente, na primeira compra. O código se digita no carrinho, na loja, na hora de fechar o pedido.</p><p style="font-size:14px;color:#6E6A5C;line-height:1.7;margin:14px 0 0">O cupom não acumula com o desconto no frete: quando ele entra no carrinho, vale o desconto do cupom e o frete sai pelo valor cheio.</p><p style="font-size:14px;color:#6E6A5C;line-height:1.7;margin:14px 0 0">Fora dele, os preços da vitrine são os mesmos da loja, sem pegadinha.</p><p style="margin:20px 0 0"><a class="add" style="display:inline-block" href="https://acasadafilo.lojavirtualnuvem.com.br/discount/BEMVINDOS10" rel="noopener">Abrir a loja com o cupom aplicado</a></p></div>
   </div>
 </div>
 
