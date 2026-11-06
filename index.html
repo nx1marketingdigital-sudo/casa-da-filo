@@ -653,7 +653,7 @@ try {
   </g>
   <circle cx="98" cy="76" r="3" fill="#C7A25A"/>
 </svg><span><b>Casa da Filó</b><small>Sua casa mais bonita de viver.</small></span></span>
-      <a class="entrada-pular" href="#loja" id="pularIntro">Pular introdução</a>
+      <a class="entrada-pular" href="produtos/">Ver todos os produtos</a>
     </div>
 
     <div class="entrada-intro" id="entradaIntro">
@@ -1322,16 +1322,16 @@ document.querySelectorAll('a[href^="produtos/"]').forEach(a => a.addEventListene
 
 pinta(); marca(); mostraCena(ambAtual);
 
-/* "Pular introdução": além de pular agora, lembra a escolha para as próximas visitas */
-(function lembraPulo(){
-  const botao = document.getElementById("pularIntro");
-  if (!botao) return;
-  botao.addEventListener("click", () => {
-    try { localStorage.setItem("casa-da-filo:intro-vista", "1"); } catch (e) {}
-    document.documentElement.classList.add("sem-intro");
-    requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: "instant" }));
-  });
-})();
+/* ✏️ 06/11/2026, por ordem do Alexandre: o link da entrada era "Pular introdução"
+   e virou "Ver todos os produtos", apontando para produtos/. Com isso o gancho
+   que guardava "já viu a introdução" SAIU, e de propósito: clicar em "ver todos
+   os produtos" é pedir o catálogo, não dispensar a entrada para sempre. Gravar a
+   marca ali tiraria a entrada imersiva de quem só queria uma lista.
+
+   A marca `casa-da-filo:intro-vista` continua sendo LIDA no script de boot, e
+   isso também é de propósito: quem clicou no link antigo já tem a marca no
+   navegador, e tirar a leitura faria a entrada voltar para essas pessoas sem
+   ninguém ter pedido. Nada escreve a marca a partir de hoje. */
 
 /* voltando de uma página de produto: #sala reabre a cena de onde a pessoa saiu */
 (function volta(){
