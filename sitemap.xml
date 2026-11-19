@@ -301,12 +301,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://casadafilo.com.br/produtos/cafeteira-italiana-inox-3-xicaras.html</loc>
-    <lastmod>2026-10-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://casadafilo.com.br/produtos/jogo-6-tacas-de-cristal-615ml.html</loc>
     <lastmod>2026-10-21</lastmod>
     <changefreq>weekly</changefreq>
@@ -326,12 +320,6 @@
   </url>
   <url>
     <loc>https://casadafilo.com.br/produtos/manteigueira-com-tampa-inox.html</loc>
-    <lastmod>2026-10-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://casadafilo.com.br/produtos/conjunto-16-talheres-inox.html</loc>
     <lastmod>2026-10-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -799,12 +787,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://casadafilo.com.br/produtos/faqueiro-inox-prime-76-pecas-com-maleta-para-12-pessoas.html</loc>
-    <lastmod>2026-10-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://casadafilo.com.br/produtos/bomboniere-de-vidro-diamond-com-tampa-19-5-cm.html</loc>
     <lastmod>2026-10-21</lastmod>
     <changefreq>weekly</changefreq>
@@ -914,6 +896,18 @@
   </url>
   <url>
     <loc>https://casadafilo.com.br/produtos/jogo-de-6-tacas-de-vidro-diamond-incolor.html</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://casadafilo.com.br/produtos/cafeteira-italiana-inox-3-xicaras.html</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://casadafilo.com.br/produtos/conjunto-16-talheres-inox.html</loc>
     <lastmod>2026-10-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -1058,6 +1052,12 @@
   </url>
   <url>
     <loc>https://casadafilo.com.br/produtos/garrafa-termica-900-ml-com-alca-e-canudo.html</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://casadafilo.com.br/produtos/faqueiro-inox-prime-76-pecas-com-maleta-para-12-pessoas.html</loc>
     <lastmod>2026-10-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
