@@ -853,12 +853,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://casadafilo.com.br/produtos/bomboniere-de-vidro-diamond-com-tampa-19-5-cm.html</loc>
-    <lastmod>2026-10-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://casadafilo.com.br/produtos/faqueiro-inox-24-pecas-estilo-hammer-para-6-pessoas.html</loc>
     <lastmod>2026-10-21</lastmod>
     <changefreq>weekly</changefreq>
@@ -1124,6 +1118,12 @@
   </url>
   <url>
     <loc>https://casadafilo.com.br/produtos/faqueiro-inox-prime-76-pecas-com-maleta-para-12-pessoas.html</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://casadafilo.com.br/produtos/bomboniere-de-vidro-diamond-com-tampa-19-5-cm.html</loc>
     <lastmod>2026-10-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
