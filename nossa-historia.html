@@ -41,6 +41,10 @@ a{color:inherit}
 .aviso{display:inline-flex;align-items:center;gap:7px;opacity:.95}
 .aviso svg{width:15px;height:15px;flex:0 0 auto}
 .topo{background:var(--paper);border-bottom:1px solid var(--hair);position:sticky;top:0;z-index:40}
+/* faixa fixa do cupom, pedida por ela em 23/11/2026: mora no cabeçalho sticky */
+.faixa-cupom{display:block;background:#F3EDE2;color:var(--forest);text-align:center;font-size:13px;line-height:1.35;padding:7px 14px;text-decoration:none;border-bottom:1px solid var(--hair)}
+.faixa-cupom b{letter-spacing:.06em}
+.faixa-cupom:hover{text-decoration:underline}
 .topo-in{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 0}
 .logo{display:flex;flex-direction:column;text-decoration:none;line-height:1.15}
 .logo svg{width:30px;height:30px;margin-bottom:3px}
@@ -176,7 +180,7 @@ a{color:inherit}
   <span class="aviso"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6"/><path d="M12 7.4V12l3 1.8"/></svg> Devolução em até 7 dias</span>
 </div></div>
 
-<header class="topo"><div class="wrap"><div class="topo-in">
+<header class="topo"><a class="faixa-cupom" href="index.html#promocoes">10% OFF na primeira compra com o cupom <b>BEMVINDOS10</b></a><div class="wrap"><div class="topo-in">
   <a class="logo" href="index.html"><svg viewBox="0 0 120 96" aria-hidden="true">
   <g fill="none" stroke="#9A7838" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
     <path d="M22 44 52 20l30 24"/>

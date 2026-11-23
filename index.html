@@ -57,6 +57,14 @@ a{color:inherit;text-decoration:none}
 
 /* ───────── 2 · header ───────── */
 .topo{background:var(--paper);border-bottom:1px solid var(--hair);position:sticky;top:0;z-index:40}
+/* faixa fixa do cupom, pedida por ela em 23/11/2026: mora no cabeçalho sticky */
+.faixa-cupom{display:block;background:#F3EDE2;color:var(--forest);text-align:center;font-size:13px;line-height:1.35;padding:7px 14px;text-decoration:none;border-bottom:1px solid var(--hair)}
+.faixa-cupom b{letter-spacing:.06em}
+.faixa-cupom:hover{text-decoration:underline}
+.banner-cupom{padding:22px 0 4px}
+.banner-cupom a{display:block}
+.banner-cupom img{display:block;width:100%;height:auto;border-radius:14px}
+@media (max-width:620px){.banner-cupom img{max-width:420px;margin:0 auto}}
 .topo-in{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:34px;padding:18px 0 6px}
 .logo{display:flex;align-items:center;gap:0;flex-direction:column;text-align:center}
 .logo svg{width:74px;height:60px}
@@ -706,18 +714,18 @@ try {
      desta lista. O aviso do cupom estava em quarto e ficava invisível no celular —
      o Alexandre abriu o site no telefone às 13h33 e viu só a linha do frete.
      Por isso o cupom vem primeiro: quando há promoção, é ela que sobra na tela
-     pequena; quando `CUPOM` está vazio, `<a class="aviso" href="#promocoes" data-tela="telaPromocoes" style="text-decoration:none;color:inherit"><span style="text-decoration:underline">Primeira compra? Use o cupom BEMVINDOS10 e ganhe 10% de desconto</span></a>` não gera elemento nenhum
+     pequena; quando `CUPOM` está vazio, `` não gera elemento nenhum
      e o aviso do frete volta a ser o primeiro, sem mexer em mais nada.
      Quem reordenar esta lista está decidindo o que o celular mostra. -->
 <div class="avisos"><div class="wrap">
-  <a class="aviso" href="#promocoes" data-tela="telaPromocoes" style="text-decoration:none;color:inherit"><span style="text-decoration:underline">Primeira compra? Use o cupom BEMVINDOS10 e ganhe 10% de desconto</span></a>
+  
   <span class="aviso"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 7h11v9H2zM13 10h4l3 3v3h-7z"/><circle cx="6.5" cy="18" r="1.7"/><circle cx="16.5" cy="18" r="1.7"/></svg> Frete calculado na hora pelo seu CEP</span>
   <span class="aviso"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="5.5" width="20" height="13" rx="2.4"/><path d="M2 10h20"/><path d="M5.5 14.5h3"/></svg> Pix, boleto ou cartão</span>
   <span class="aviso"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6"/><path d="M12 7.4V12l3 1.8"/></svg> Devolução em até 7 dias</span>
 </div></div>
 
 <!-- 3 · header -->
-<header class="topo"><div class="wrap">
+<header class="topo"><a class="faixa-cupom" href="#promocoes" data-tela="telaPromocoes">10% OFF na primeira compra com o cupom <b>BEMVINDOS10</b></a><div class="wrap">
   <div class="topo-in">
     <a class="logo" href="#topo"><svg viewBox="0 0 120 96" aria-hidden="true">
   <g fill="none" stroke="#9A7838" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
@@ -746,6 +754,9 @@ try {
   </div>
   <nav class="menu"><a href="#ambientes" data-amb-card="sala">Sala</a><a href="#ambientes" data-amb-card="cozinha">Cozinha</a><a href="#ambientes" data-amb-card="quarto">Quarto</a><a href="#ambientes" data-amb-card="banheiro">Banheiro</a><a href="#ambientes" data-amb-card="escritorio">Escritório</a><a href="#ambientes" data-amb-card="lavanderia">Lavanderia</a><a href="#ambientes" data-amb-card="varanda">Varanda</a><a href="#ambientes" data-amb-card="pet">Cantinho Pet</a><a href="produtos/" ><span class="so-largo">Todos os produtos</span><span class="so-estreito">Ver tudo</span></a><a href="#novidades" data-tela="telaNovidades">Novidades</a><a href="#promocoes" data-tela="telaPromocoes">Promoções</a><a href="nossa-historia.html" >Sobre nós</a></nav>
 </div></header>
+
+<!-- 3b · banner do cupom com a arte dela (23/11/2026) -->
+<section class="banner-cupom" aria-label="Cupom de primeira compra"><div class="wrap"><a href="#promocoes" data-tela="telaPromocoes"><picture><source media="(max-width:620px)" srcset="img/a73384688f0cb74c.jpg"><img src="img/e0c3d7cf9a9ef08f.jpg" alt="Primeira compra na Filó? 10% OFF. Use o cupom BEMVINDOS10, válido na sua primeira compra." width="1600" height="500" loading="lazy" decoding="async"></picture></a></div></section>
 
 <!-- 4 · produtos — a vitrine, SUBIDA para cá em 14/11/2026 a pedido da cliente -->
 <section class="sec" style="padding-top:0" id="produtos"><div class="wrap">
@@ -1349,6 +1360,8 @@ pinta(); marca(); mostraCena(ambAtual);
 (function volta(){
   const id = (location.hash || "").replace("#", "");
   if (AMBIENTES[id]) { mostraCena(id); abreTela("telaCena"); return; }
+  /* #promocoes: a faixa do cupom nas outras páginas aponta para cá (23/11/2026) */
+  if (id === "promocoes") { abreTela("telaPromocoes"); return; }
 
   /* Âncora de seção (#ambientes, #produtos, #sobre): o salto nativo do navegador
      perde a corrida com as fotos — a página ainda está crescendo quando ele rola,
