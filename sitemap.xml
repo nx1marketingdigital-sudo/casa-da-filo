@@ -727,12 +727,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://casadafilo.com.br/produtos/conjunto-3-cestos-organizadores-em-bambu-p-m-e-g.html</loc>
-    <lastmod>2026-10-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://casadafilo.com.br/produtos/kit-3-cestos-organizadores-em-bambu-com-forro-bege.html</loc>
     <lastmod>2026-10-21</lastmod>
     <changefreq>weekly</changefreq>
@@ -1100,6 +1094,12 @@
   </url>
   <url>
     <loc>https://casadafilo.com.br/produtos/cesto-organizador-dobravel-listrado-70-litros.html</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://casadafilo.com.br/produtos/conjunto-3-cestos-organizadores-em-bambu-p-m-e-g.html</loc>
     <lastmod>2026-10-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
