@@ -619,12 +619,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://casadafilo.com.br/produtos/jogo-2-copos-de-cafe-parede-dupla-com-coracao-90-ml.html</loc>
-    <lastmod>2026-10-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://casadafilo.com.br/produtos/jogo-6-copos-de-vidro-lily-com-relevo-280-ml.html</loc>
     <lastmod>2026-10-21</lastmod>
     <changefreq>weekly</changefreq>
@@ -938,6 +932,12 @@
   </url>
   <url>
     <loc>https://casadafilo.com.br/produtos/manteigueira-com-tampa-inox.html</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://casadafilo.com.br/produtos/jogo-2-copos-de-cafe-parede-dupla-com-coracao-90-ml.html</loc>
     <lastmod>2026-10-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
