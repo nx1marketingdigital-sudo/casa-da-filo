@@ -170,13 +170,24 @@ a{color:inherit}
   .selos{grid-template-columns:1fr}
   .texto p.capitular::first-letter{font-size:50px}
 }
+
+/* ✏️ 25/11/2026 — pedido dela: preço em Lato, com algarismos alinhados
+   (na Cormorant o 3 parecia 9: R$ 30,90). Vale para todo preço do site. */
+.preco,.preco-de,.precos,.balao .preco,.card .preco,[data-preco] .preco{font-family:var(--sans)!important;font-variant-numeric:lining-nums tabular-nums}
+
+/* ✏️ 25/11/2026 — logo do rodapé no mesmo arranjo do topo (pedido dela):
+   casinha em cima, nome, e a frase. */
+.rodape .logo{display:flex;flex-direction:column;align-items:center;text-align:center;gap:0}
+.rodape .logo svg{width:58px;height:48px;margin:0}
+.rodape .logo b{margin-top:2px!important;white-space:normal}
+.rodape .logo small{display:block!important;font-family:var(--serif);font-style:italic;font-size:11px;letter-spacing:.02em;text-transform:none}
 </style>
 </head>
 <body>
 
 <div class="avisos"><div class="wrap">
   <span class="aviso"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 7h11v9H2zM13 10h4l3 3v3h-7z"/><circle cx="6.5" cy="18" r="1.7"/><circle cx="16.5" cy="18" r="1.7"/></svg> Frete calculado na hora pelo seu CEP</span>
-  <span class="aviso"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="5.5" width="20" height="13" rx="2.4"/><path d="M2 10h20"/><path d="M5.5 14.5h3"/></svg> Pix, boleto ou cartão</span>
+  <span class="aviso"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="5.5" width="20" height="13" rx="2.4"/><path d="M2 10h20"/><path d="M5.5 14.5h3"/></svg> Pix ou cartão</span>
   <span class="aviso"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6"/><path d="M12 7.4V12l3 1.8"/></svg> Devolução em até 7 dias</span>
 </div></div>
 
@@ -284,7 +295,7 @@ a{color:inherit}
 </div></section>
 
 <footer class="rodape"><div class="wrap">
-  <span class="logo" style="flex-direction:row;gap:10px;align-items:center"><svg viewBox="0 0 120 96" aria-hidden="true">
+  <span class="logo"><svg viewBox="0 0 120 96" aria-hidden="true">
   <g fill="none" stroke="#9A7838" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
     <path d="M22 44 52 20l30 24"/>
     <path d="M28 41v34h48V41"/>
@@ -299,7 +310,7 @@ a{color:inherit}
     <path d="M80 70c2.6-3.4 6-4.2 10-2.4-2.2 3.6-5.8 4.6-10 2.4Z"/>
   </g>
   <circle cx="98" cy="76" r="3" fill="#C7A25A"/>
-</svg><b style="margin:0">Casa da Filó</b></span>
+</svg><b>Casa da Filó</b><small>Sua casa mais bonita de viver.</small></span>
   <div class="legais">
     <span>© 2026 Casa da Filó</span>
     <span class="cadastro">FILO CASA &amp; DECORACAO LTDA · CNPJ 69.221.806/0001-06</span>
