@@ -718,5 +718,128 @@ document.querySelectorAll(".opcoes").forEach(g => {
   });
 })();
 </script>
+<style>
+.vip-fundo{position:fixed;inset:0;z-index:80;background:rgba(30,32,24,.55);display:none;
+  align-items:center;justify-content:center;padding:16px}
+.vip-fundo.on{display:flex}
+.vip{position:relative;background:#FBF8F1;color:#2C2A22;border-radius:14px;max-width:400px;width:100%;
+  padding:30px 26px 22px;box-shadow:0 18px 50px rgba(0,0,0,.25);font-family:var(--sans,Arial,sans-serif)}
+.vip h2{font-family:var(--serif,Georgia,serif);font-weight:500;font-size:30px;line-height:1.1;margin:0 0 8px;color:#3A4630}
+.vip p.sub{margin:0 0 18px;font-size:15px;line-height:1.5;color:#5B574B}
+.vip label{display:block;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#6E6A5C;margin:0 0 5px}
+.vip input{width:100%;box-sizing:border-box;border:1px solid #D8CDB6;border-radius:8px;padding:11px 12px;
+  font:15px var(--sans,Arial,sans-serif);margin:0 0 12px;background:#fff;color:#2C2A22}
+.vip input:focus{outline:2px solid #C7A25A;outline-offset:1px}
+.vip button.ok{width:100%;border:0;border-radius:8px;background:#3A4630;color:#F6F3E9;padding:13px;
+  font:700 14px var(--sans,Arial,sans-serif);letter-spacing:.05em;text-transform:uppercase;cursor:pointer}
+.vip button.ok:hover{background:#4A5840}
+.vip button.ok[disabled]{opacity:.6;cursor:wait}
+.vip .x{position:absolute;top:8px;right:8px;width:38px;height:38px;border:0;background:transparent;
+  font-size:24px;line-height:1;color:#6E6A5C;cursor:pointer}
+.vip .lgpd-vip{font-size:12px;line-height:1.45;color:#6E6A5C;margin:12px 0 0}
+.vip .lgpd-vip a{color:#6E6A5C}
+.vip .erro{color:#9B3B2E;font-size:13px;margin:-4px 0 10px;min-height:0}
+.vip .feito{font-size:16px;line-height:1.5;margin:8px 0 4px}
+.news-ok{margin-top:14px;font-size:15px;color:#3A4630}
+</style><div class="vip-fundo" id="vipFundo" aria-hidden="true">
+<div class="vip" role="dialog" aria-modal="true" aria-labelledby="vipTitulo">
+<button class="x" type="button" id="vipFechar" aria-label="Fechar">&times;</button>
+<h2 id="vipTitulo">Lista VIP da Filó</h2><p class="sub">Receba novidades e ofertas exclusivas da Filó.</p>
+<form id="vipForm" novalidate>
+<label for="vipNome">Nome</label><input id="vipNome" autocomplete="name" required>
+<label for="vipEmail">E-mail</label><input id="vipEmail" type="email" autocomplete="email" inputmode="email">
+<label for="vipZap">WhatsApp</label><input id="vipZap" type="tel" autocomplete="tel" inputmode="tel" placeholder="(67) 99999-9999">
+<p class="erro" id="vipErro" role="alert"></p>
+<button class="ok" type="submit">Quero entrar</button>
+<p class="lgpd-vip">Ao enviar, você aceita receber novidades e ofertas da Casa da Filó por e-mail e WhatsApp. Seus dados são usados só pela Casa da Filó, e você pode sair da lista quando quiser. <a href="https://acasadafilo.lojavirtualnuvem.com.br/politica-de-privacidade/" target="_blank" rel="noopener">Política de privacidade</a>.</p>
+</form>
+<div id="vipFeito" hidden><p class="feito"><b>Pronto, você está na lista VIP!</b><br>As novidades da Filó chegam primeiro para você.</p></div>
+</div></div><script>
+(function(){
+  var URL_FORM = "https://docs.google.com/forms/d/e/1FAIpQLSd-oUHCBm6oBwVqvwAfsPefZgc9O3ffA3PsJfhp1rzJBP0yoQ/formResponse", CAMPO = {nome:"entry.1769731308", email:"entry.1425030034", zap:"entry.1444530430"};
+  var CHAVE = "casa-da-filo:lista-vip", DIAS = 30;
+  function le(){ try { return localStorage.getItem(CHAVE) || ""; } catch(e){ return ""; } }
+  function grava(v){ try { localStorage.setItem(CHAVE, v); } catch(e){} }
+  function envia(nome, email, zap, origem){
+    var dados = new URLSearchParams();
+    dados.append(CAMPO.nome, nome); dados.append(CAMPO.email, email); dados.append(CAMPO.zap, zap);
+    if (window.gtag) { try { gtag("event", "lista_vip", {origem: origem}); } catch(e){} }
+    return fetch(URL_FORM, {method:"POST", mode:"no-cors", body:dados});
+  }
+  var emailOk = function(e){ return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e); };
+  var zapOk = function(z){ var d = z.replace(/\D/g, ""); return d.length >= 10 && d.length <= 13; };
+
+  /* o campo do rodapé ("Entre para a nossa lista") — até 26/11 não guardava nada */
+  document.querySelectorAll("form.news").forEach(function(f){
+    f.removeAttribute("onsubmit");
+    f.addEventListener("submit", function(ev){
+      ev.preventDefault();
+      var campo = f.querySelector("input"), email = (campo.value || "").trim();
+      if (!emailOk(email)) { campo.focus(); campo.setCustomValidity("Confira o e-mail"); campo.reportValidity();
+        campo.setCustomValidity(""); return; }
+      var bt = f.querySelector("button"); bt.disabled = true;
+      envia("(rodapé do site)", email, "", "rodape").then(function(){
+        grava("entrou");
+        f.outerHTML = '<p class="news-ok">Pronto! Seu e-mail entrou na lista VIP da Filó.</p>';
+      }).catch(function(){ bt.disabled = false; alert("Não deu certo agora. Tente de novo em instantes."); });
+    });
+  });
+
+  var fundo = document.getElementById("vipFundo");
+  if (!fundo) return;
+  var feito = le();
+  if (feito === "entrou") return;
+  if (feito.indexOf("fechou:") === 0 && Date.now() - (+feito.slice(7)) < DIAS*864e5) return;
+
+  function abre(){
+    if (document.querySelector("#lgpd.on")) { setTimeout(abre, 4000); return; }   // nunca por cima dos cookies
+    fundo.classList.add("on"); fundo.setAttribute("aria-hidden", "false");
+    setTimeout(function(){ document.getElementById("vipNome").focus({preventScroll:true}); }, 50);
+    if (window.gtag) { try { gtag("event", "lista_vip_aberta"); } catch(e){} }
+  }
+  function fecha(){
+    fundo.classList.remove("on"); fundo.setAttribute("aria-hidden", "true");
+    if (le() !== "entrou") grava("fechou:" + Date.now());
+  }
+  document.getElementById("vipFechar").onclick = fecha;
+  fundo.addEventListener("click", function(ev){ if (ev.target === fundo) fecha(); });
+  document.addEventListener("keydown", function(ev){ if (ev.key === "Escape" && fundo.classList.contains("on")) fecha(); });
+
+  /* aparece UMA vez: depois que a pessoa passou da primeira tela E ficou 15 s
+     ou desceu até a metade da página. Quem só chegou não leva pop-up na cara. */
+  var t0 = Date.now(), disparou = false;
+  function confere(){
+    if (disparou) return;
+    var passou = window.scrollY > window.innerHeight * 0.8;
+    var metade = window.scrollY + window.innerHeight > document.documentElement.scrollHeight * 0.5;
+    if (passou && (Date.now() - t0 > 15000 || metade)) { disparou = true; abre(); }
+  }
+  window.addEventListener("scroll", confere, {passive:true});
+  setInterval(confere, 3000);
+
+  document.getElementById("vipForm").addEventListener("submit", function(ev){
+    ev.preventDefault();
+    var nome = document.getElementById("vipNome").value.trim();
+    var email = document.getElementById("vipEmail").value.trim();
+    var zap = document.getElementById("vipZap").value.trim();
+    var erro = document.getElementById("vipErro");
+    if (!nome) { erro.textContent = "Conta pra gente o seu nome."; return; }
+    if (!email && !zap) { erro.textContent = "Deixe o seu e-mail ou o seu WhatsApp."; return; }
+    if (email && !emailOk(email)) { erro.textContent = "Confira o e-mail."; return; }
+    if (zap && !zapOk(zap)) { erro.textContent = "Confira o WhatsApp, com DDD."; return; }
+    erro.textContent = "";
+    var bt = this.querySelector("button.ok"); bt.disabled = true; bt.textContent = "Enviando…";
+    envia(nome, email, zap, "popup").then(function(){
+      grava("entrou");
+      document.getElementById("vipForm").hidden = true;
+      document.getElementById("vipFeito").hidden = false;
+      setTimeout(function(){ fundo.classList.remove("on"); }, 3500);
+    }).catch(function(){
+      bt.disabled = false; bt.textContent = "Quero entrar";
+      erro.textContent = "Não deu certo agora. Tente de novo em instantes.";
+    });
+  });
+})();
+</script>
 </body>
 </html>
