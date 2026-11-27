@@ -217,12 +217,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://casadafilo.com.br/produtos/pote-hermetico-de-vidro-canelado-2-2-l.html</loc>
-    <lastmod>2026-10-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://casadafilo.com.br/produtos/lata-cereais-verde-salvia.html</loc>
     <lastmod>2026-10-21</lastmod>
     <changefreq>weekly</changefreq>
@@ -337,12 +331,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://casadafilo.com.br/produtos/cesto-de-bambu-com-alcas-e-tampa-70l-branco.html</loc>
-    <lastmod>2026-10-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://casadafilo.com.br/produtos/cesto-de-bambu-com-alcas-e-tampa-70l-marrom.html</loc>
     <lastmod>2026-10-21</lastmod>
     <changefreq>weekly</changefreq>
@@ -361,12 +349,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://casadafilo.com.br/produtos/faqueiro-conjunto-talheres-luxo-black-24-pecas-inoxidavel.html</loc>
-    <lastmod>2026-10-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://casadafilo.com.br/produtos/jogo-de-faqueiro-24-pecas-inox.html</loc>
     <lastmod>2026-10-21</lastmod>
     <changefreq>weekly</changefreq>
@@ -380,12 +362,6 @@
   </url>
   <url>
     <loc>https://casadafilo.com.br/produtos/fruteira-metalica-2-andares-preta.html</loc>
-    <lastmod>2026-10-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://casadafilo.com.br/produtos/conjunto-4-petisqueira-quadrada-em-madeira.html</loc>
     <lastmod>2026-10-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -631,12 +607,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://casadafilo.com.br/produtos/escova-sanitaria-com-suporte-em-inox.html</loc>
-    <lastmod>2026-10-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://casadafilo.com.br/produtos/fruteira-de-mesa-2-andares-aramada-preta-com-alca.html</loc>
     <lastmod>2026-10-21</lastmod>
     <changefreq>weekly</changefreq>
@@ -650,12 +620,6 @@
   </url>
   <url>
     <loc>https://casadafilo.com.br/produtos/cafeteira-italiana-milao-300-ml-cor-sortida.html</loc>
-    <lastmod>2026-10-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://casadafilo.com.br/produtos/garrafa-termica-amsterda-1-litro-com-cabo-de-madeira.html</loc>
     <lastmod>2026-10-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -859,12 +823,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://casadafilo.com.br/produtos/jogo-6-xicaras-tropical-lagoon-130-ml.html</loc>
-    <lastmod>2026-10-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://casadafilo.com.br/produtos/chaleira-de-vidro-1-litro-com-tampa-de-bambu.html</loc>
     <lastmod>2026-10-21</lastmod>
     <changefreq>weekly</changefreq>
@@ -949,13 +907,55 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://casadafilo.com.br/produtos/pote-hermetico-de-vidro-canelado-2-2-l.html</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://casadafilo.com.br/produtos/cesto-de-bambu-com-alcas-e-tampa-70l-branco.html</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://casadafilo.com.br/produtos/faqueiro-conjunto-talheres-luxo-black-24-pecas-inoxidavel.html</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://casadafilo.com.br/produtos/conjunto-4-petisqueira-quadrada-em-madeira.html</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://casadafilo.com.br/produtos/manteigueira-com-tampa-inox.html</loc>
     <lastmod>2026-10-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://casadafilo.com.br/produtos/escova-sanitaria-com-suporte-em-inox.html</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://casadafilo.com.br/produtos/jogo-2-copos-de-cafe-parede-dupla-com-coracao-90-ml.html</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://casadafilo.com.br/produtos/garrafa-termica-amsterda-1-litro-com-cabo-de-madeira.html</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://casadafilo.com.br/produtos/jogo-6-xicaras-tropical-lagoon-130-ml.html</loc>
     <lastmod>2026-10-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
